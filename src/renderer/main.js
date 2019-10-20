@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Ele from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
-Vue.use(Ele)
+Vue.use(Ele, {size: 'mini'})
 import axios from 'axios'
 
 import App from './App'

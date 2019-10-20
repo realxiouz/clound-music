@@ -9,4 +9,6 @@ http.interceptors.response.use(res => {
   Promise.reject(err)
 })
 
+export const login = params => http.get('/login', {params})
+
 export const getBanners = _ => http.get('/banner')
