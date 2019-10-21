@@ -1,15 +1,17 @@
 import Vue from 'vue'
 import Ele from 'element-ui'
+import '@/common/css/chin.scss'
 import 'element-ui/lib/theme-chalk/index.css'
 Vue.use(Ele, {size: 'mini'})
-import axios from 'axios'
 
 import App from './App'
 import router from './router'
 import store from './store'
 
+import Local from '@/common/local'
+Vue.prototype.$local = Local
+
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
-Vue.http = Vue.prototype.$http = axios
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */

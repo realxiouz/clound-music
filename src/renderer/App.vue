@@ -9,11 +9,22 @@
 
 <script>
   import TitleBar from '@/components/title-bar'
+  import { mapMutations } from 'vuex'
 
   export default {
     name: 'chin',
+    created() {
+      this._initApp()
+    },
     components: {
       TitleBar
+    },
+    methods: {
+      ...mapMutations('auth', ['setUser']),
+      _initApp() {
+        let user = this.$local.get('user')
+        user && this.setUser(user)
+      }
     }
   }
 </script>

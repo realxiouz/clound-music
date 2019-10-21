@@ -1,0 +1,20 @@
+.flex{
+  display: flex;
+  &.wrap{
+    flex-wrap: wrap;
+  }
+  &.direction{
+    flex-direction: column;
+  }
+}
+
+.pos-r{
+  position: relative;
+}
+.pos-a{
+  position: absolute;
+}
+
+.text-center{
+  text-align: center;
+}

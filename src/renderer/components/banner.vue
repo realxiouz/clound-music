@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-carousel :interval="4000" type="card" height="200px">
+    <el-carousel :interval="4000" type="card" height="200px" v-loading="loading">
       <el-carousel-item v-for="(i, inx) in imgs" :key="inx">
         <img :src="i.imageUrl" style="width:540px;height:200px"/>
       </el-carousel-item>
@@ -16,14 +16,17 @@ export default {
   },
   data() {
     return {
-      imgs: []
+      imgs: [],
+      loading: false
     }
   },
   methods: {
     _getData() {
+      this.loading = true
       getBanners().then(r => {
-        console.log(r)
         this.imgs = r.banners
+      }).finally(_ => {
+        this.loading = false
       })
     }
   }
