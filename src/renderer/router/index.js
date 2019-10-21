@@ -4,6 +4,7 @@ import Router from 'vue-router'
 import MainLayout from "@/pages/layout/main"
 import Find from '@/pages/find'
 import FM from '@/pages/FM'
+import Sheet from '@/pages/sheet'
 
 Vue.use(Router)
 
@@ -25,6 +26,10 @@ export default new Router({
         {
           path: 'fm',
           component: FM
+        },
+        {
+          path: 'sheet',
+          component: Sheet
         }
       ]
     }

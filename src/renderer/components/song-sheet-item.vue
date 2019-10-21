@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div style="width: 140px; height: 140px" class="pos-r text-center">
+    <div style="width: 140px; height: 140px" class="pos-r text-center" @click="handleSheetDetail">
       <template v-if="date">
         <span>{{weekStr}}</span>
         <br/>
@@ -46,6 +46,11 @@ export default {
     return {
       weekStr: week[new Date().getDay()],
       dateStr: new Date().getDate() < 10 ? `0${new Date().getDate()}` : new Date().getDate()
+    }
+  },
+  methods: {
+    handleSheetDetail() {
+      this.$router.push({path: `/main/sheet?id=${this.bean.id}`})
     }
   }
 }
