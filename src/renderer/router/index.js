@@ -5,6 +5,7 @@ import MainLayout from "@/pages/layout/main"
 import Find from '@/pages/find'
 import FM from '@/pages/FM'
 import Sheet from '@/pages/sheet'
+import SongDetail from '@/pages/song-detail'
 
 Vue.use(Router)
 
@@ -32,6 +33,10 @@ export default new Router({
           component: Sheet
         }
       ]
+    },
+    {
+      path: '/song-detail/:id',
+      component: SongDetail
     }
   ]
 })

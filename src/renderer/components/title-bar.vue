@@ -2,7 +2,7 @@
   <div class="title-bar">
     <div>某云音乐</div>
     <el-button-group>
-      <el-button type="primary" icon="el-icon-edit"></el-button>
+      <el-button type="primary" icon="el-icon-edit" @click="handleBack"></el-button>
       <el-button type="primary" icon="el-icon-share"></el-button>
     </el-button-group>
     <el-autocomplete
@@ -87,6 +87,9 @@ export default {
         this.$local.set('user', user)
         this.dialogLogin = false
       })
+    },
+    handleBack() {
+      this.$router.go(-1)
     }
   },
   computed: {
