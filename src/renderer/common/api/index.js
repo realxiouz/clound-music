@@ -30,3 +30,5 @@ export const loginByPhone = params => http.get('/login/cellphone', {params})
 export const getBanners = _ => http.get('/banner')
 export const getSongSheet = params => http.get('/personalized', {params})
 export const getSongSheetDetail = params => http.get('/playlist/detail', {params})
+
+export const getSongUrl = params => http.get('/song/url', {params})

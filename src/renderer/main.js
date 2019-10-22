@@ -8,6 +8,8 @@ import App from './App'
 import router from './router'
 import store from './store'
 
+import './fliter'
+
 import Local from '@/common/local'
 Vue.prototype.$local = Local
 

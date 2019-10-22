@@ -6,6 +6,20 @@
   &.direction{
     flex-direction: column;
   }
+  &.between{
+    justify-content: space-between;
+  }
+
+  .flex-left{
+    flex: 1;
+    width: 0;
+  }
+}
+
+.text-dot{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .pos-r{
