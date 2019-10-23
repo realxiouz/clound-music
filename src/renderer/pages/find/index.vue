@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="padding:0 30px;">
     <el-tabs>
       <el-tab-pane label="个性推荐">
         <recommend />

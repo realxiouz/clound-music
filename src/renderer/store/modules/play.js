@@ -42,12 +42,14 @@ const actions = {
     }
     if (state.listAudio[state.indexAudio].url) {
       commit('setCurrentAudio', state.listAudio[state.indexAudio])
+      commit('setAudioPlaying', true)
     } else {
       let {id} = state.listAudio[state.indexAudio]
       getSongUrl({id}).then(r => {
         if (r.data.length) {
           let url = r.data[0].url
           commit('setCurrentAudio', {...state.listAudio[state.indexAudio], url})
+          commit('setAudioPlaying', true)
           state.listAudio[state.indexAudio].url = url
           // commit('setListAudio', state.listAudio.splice(state.indexAudio, 1, {...state.listAudio[state.indexAudio], url}))
         }

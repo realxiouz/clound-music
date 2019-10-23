@@ -19,6 +19,7 @@
   }
 </script>
 <style lang="scss" scoped>
+@import '../../common/css/var.scss';
 .main-layout{
   display: flex;
   flex-direction: column;
@@ -27,6 +28,7 @@
     height: 0;
     flex: 1;
     display: flex;
+    background: $dark1;
   }
 }
 </style>

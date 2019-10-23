@@ -1,6 +1,6 @@
 <template>
   <div class="title-bar">
-    <div>某云音乐</div>
+    <div @click="$router.push('/main/find')">某云音乐</div>
     <el-button-group>
       <el-button type="primary" icon="el-icon-edit" @click="handleBack"></el-button>
       <el-button type="primary" icon="el-icon-share"></el-button>

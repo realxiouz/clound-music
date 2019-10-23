@@ -1,9 +1,9 @@
 <template>
-  <div style="background: gray;width:200px" class="flex direction">
+  <div class="main-wrap flex direction">
     <div style="height:0;flex:1">
       <div v-for="(i, inx) in menu" :key="inx">
-        <div>{{i.text}}</div>
-        <div v-for="(item, index) in i.subs" :key="`${inx}-${index}`" @click="$router.push({path: item.path})">
+        <div class="f-title">{{i.text}}</div>
+        <div class="s-title" :class="$route.path == item.path ? 'active':''" v-for="(item, index) in i.subs" :key="`${inx}-${index}`" @click="$router.push({path: item.path})">
           {{item.text}}
         </div>
       </div>
@@ -35,11 +35,33 @@ export default {
   methods: {
     handleDetail() {
       this.$router.push({
-        path: `/song-detail/${this.currentAudio.id}`
+        path: `/song-detail`
       })
     }
-  }
+  },
 }
 </script>
 
+<style lang="scss" scoped>
+ @import '../common/css/var.scss';
+ .main-wrap{
+   background: $dark2;
+   width:200px;
+   border-right: 1px solid #23262C;
+ }
 
+ .f-title{
+   padding: 10px;
+ }
+ .s-title{
+   padding: 10px 15px;
+   border-left: 4px solid;
+   border-color: transparent;
+   background-color: transparent;
+   cursor: pointer;
+   &.active{
+     border-color: $primary1;
+     background-color: #26282C;
+   }
+ }
+</style>

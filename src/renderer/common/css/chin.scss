@@ -9,6 +9,9 @@
   &.between{
     justify-content: space-between;
   }
+  &.align-center{
+    align-items: center;
+  }
 
   .flex-left{
     flex: 1;

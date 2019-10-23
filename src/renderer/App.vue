@@ -43,12 +43,19 @@
 </script>
 
 <style lang="scss">
+@import './common/css/var.scss';
 body{
   margin: 0;
+  color: $light1;
+  font-size: 12px;
 }
 .app{
   display: flex;
   flex-direction: column;
   height: 100vh;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
 }
 </style>

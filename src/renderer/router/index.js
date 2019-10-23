@@ -35,7 +35,7 @@ export default new Router({
       ]
     },
     {
-      path: '/song-detail/:id',
+      path: '/song-detail',
       component: SongDetail
     }
   ]
