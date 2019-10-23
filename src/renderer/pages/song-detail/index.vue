@@ -40,7 +40,9 @@
           this.lyric = new Lyric(r.lrc.lyric, ({lineNum, txt}) => {
             this.line = lineNum
           })
+          // console.log(this.lyric.lrc)
           this.lyric.seek(this.playTime)
+          this.$root.$lyric = this.lyric
         })
       },
     },
@@ -53,6 +55,7 @@
           this.lyric && this.lyric.stop()
           this.lyric = null
           this.line = 0
+          this.$root.$lyric = null
           val && this._getLyric(val)
         },
         immediate: true

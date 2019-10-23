@@ -59,6 +59,7 @@ export default {
     },
     handleSeek(val) {
       this.$root.$audio.currentTime = val
+      this.$root.$lyric && this.$root.$lyric.seek(val*1000)
     }
   },
   watch: {
