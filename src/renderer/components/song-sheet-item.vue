@@ -2,9 +2,10 @@
   <div>
     <div style="width: 140px; height: 140px" class="pos-r text-center" @click="handleSheetDetail">
       <template v-if="date">
-        <span>{{weekStr}}</span>
-        <br/>
-        <span>{{dateStr}}</span>
+        <div style="height:100%;background:#fff">
+          <div class="text-center" style="padding:20px 0 15px">{{weekStr}}</div>
+          <div class="text-center" style="font-size:45px;color:red;font-weight:bold">{{dateStr}}</div>
+        </div>
       </template>
       <template v-else>
         <el-image

@@ -26,10 +26,24 @@ http.interceptors.response.use(res => {
 
 export const loginByPhone = params => http.get('/login/cellphone', {params})
 
-// 发现音乐
+
 export const getBanners = _ => http.get('/banner')
+// 根据歌单
 export const getSongSheet = params => http.get('/personalized', {params})
+
+// 获取每日推荐
+export const getRecommend = _ => http.get('/recommend/resource')
+// 根据id获取歌单详情
 export const getSongSheetDetail = params => http.get('/playlist/detail', {params})
 
 export const getSongUrl = params => http.get('/song/url', {params})
 export const getSongLyric = params => http.get('/lyric', {params})
+
+// artist
+export const getArtistList = params => http.get('/artist/list', {params})
+export const getArtistAlbum = params => http.get('/artist/album', {params})
+export const getArtistDesc = params => http.get('/artist/desc', {params})
+export const getArtistSong = params => http.get('/artists', {params})
+export const getArtistMv = params => http.get('/artist/mv', {params})
+export const getArtistSimilar = params => http.get('/simi/artist', {params})
+

@@ -6,6 +6,8 @@ import Find from '@/pages/find'
 import FM from '@/pages/FM'
 import Sheet from '@/pages/sheet'
 import SongDetail from '@/pages/song-detail'
+import ArtistDetail from '@/pages/artist-detail'
+
 
 Vue.use(Router)
 
@@ -31,6 +33,10 @@ export default new Router({
         {
           path: 'sheet',
           component: Sheet
+        },
+        {
+          path: 'artist-detail',
+          component: ArtistDetail
         }
       ]
     },
