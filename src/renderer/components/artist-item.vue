@@ -18,7 +18,7 @@ export default {
     handleDetail() {
       this.setCurrent(this.bean)
       this.$router.push({
-        path: `/main/artist-detail`
+        path: `/main/artist-detail/${this.bean.id}`
       })
     }
   },

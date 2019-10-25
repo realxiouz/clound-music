@@ -16,8 +16,17 @@
         @change="handleSeek"/>
       <span>{{currentAudio.dt|songLength}}</span>
     </div>
+    <div class="flex align-center" style="width:200px">
+      <el-slider
+        v-model="volume"
+        class="flex-left"
+        style="margin:0 10px 0 15px"
+        :min="0"
+        :max="100"
+        @change="handleVolumeChange"/>
+    </div>
     <div class="flex-left"></div>
-    <div v-if="listAudio.length" @click="showSongSheet=true">
+    <div v-if="listAudio.length" @click="showSongSheet=!showSongSheet">
       歌单-{{listAudio.length}}
     </div>
 
@@ -32,6 +41,7 @@ import DialogSheet from './dialog-song-sheet'
 export default {
   data() {
     return {
+      volume: this.$local.get('volume') || 49,
       progress: 0,
       showSongSheet: false
     }
@@ -60,6 +70,10 @@ export default {
     handleSeek(val) {
       this.$root.$audio.currentTime = val
       this.$root.$lyric && this.$root.$lyric.seek(val*1000)
+    },
+    handleVolumeChange(val) {
+      this.$root.$audio.volume = val/100
+      this.$local.set('volume', val)
     }
   },
   watch: {

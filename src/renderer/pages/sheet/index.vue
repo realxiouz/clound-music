@@ -3,7 +3,9 @@
     <div class="flex" style="padding:30px">
       <el-image style="width:200px;height:200px;margin-right:30px" :src="playList.coverImgUrl"></el-image>
       <div class="flex-left">
-        <div>{{playList.name}}</div>
+        <div>
+          <el-tag>歌单</el-tag>
+          {{playList.name}}</div>
         <div class="flex">
           <el-avatar :src="playList.creator.avatarUrl"></el-avatar>
           <div>{{playList.creator.nickname}}</div>

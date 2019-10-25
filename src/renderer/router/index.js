@@ -7,7 +7,7 @@ import FM from '@/pages/FM'
 import Sheet from '@/pages/sheet'
 import SongDetail from '@/pages/song-detail'
 import ArtistDetail from '@/pages/artist-detail'
-
+import AlbumDetail from '@/pages/album-detail'
 
 Vue.use(Router)
 
@@ -35,8 +35,12 @@ export default new Router({
           component: Sheet
         },
         {
-          path: 'artist-detail',
+          path: 'artist-detail/:id?',
           component: ArtistDetail
+        },
+        {
+          path: 'album-detail/:id?',
+          component: AlbumDetail
         }
       ]
     },

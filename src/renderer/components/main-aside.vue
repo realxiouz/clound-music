@@ -8,11 +8,14 @@
         </div>
       </div>
     </div>
-    <div style="padding:5px" class="flex" v-if="listAudio.length" @click="handleDetail">
-      <el-image :src="currentAudio.al.picUrl" style="width:45px;height:45px;margin-right:5px"></el-image>
-      <div class="flex-left">
+    <div class="mini-player flex" v-if="listAudio.length" >
+      <el-image :src="currentAudio.al.picUrl" style="width:45px;height:45px;margin-right:4px"></el-image>
+      <div class="flex-left flex direction between" style="padding: 5px 0">
         <div>
-          <span>{{currentAudio.name}}</span>
+          <span class="song" @click="handleDetail">{{currentAudio.name}}</span>
+        </div>
+        <div>
+          <span class="artist" @click="handleArtist">{{currentAudio.ar[0].name}}</span>
         </div>
       </div>
     </div>
@@ -21,7 +24,7 @@
 
 <script>
 import menu from '@/common/data/menu'
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 
 export default {
   data() {
@@ -33,9 +36,16 @@ export default {
     ...mapState('play', ['currentAudio', 'listAudio'])
   },
   methods: {
+    ...mapMutations('artist', ['setCurrent']),
     handleDetail() {
       this.$router.push({
         path: `/song-detail`
+      })
+    },
+    handleArtist() {
+      this.setCurrent(this.currentAudio.ar[0])
+      this.$router.push({
+        path: `/main/artist-detail/${this.currentAudio.ar[0].id}`
       })
     }
   },
@@ -62,6 +72,20 @@ export default {
    &.active{
      border-color: $primary1;
      background-color: #26282C;
+   }
+ }
+
+ .mini-player{
+   padding: 5px;
+   border-top: 1px solid $light2;
+   .song{
+     color: $light1;
+   }
+   .artist{
+     color: $light2;
+     &:hover{
+       color: $light1;
+     }
    }
  }
 </style>

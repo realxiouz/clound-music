@@ -13,11 +13,18 @@ http.interceptors.response.use(res => {
       if (data.code === 200) {
         return data
       } else {
-        Message({message: data.message, type: 'warning'})
+        if (data.code === 301) {
+          Message({message: data.msg, type: 'warning'})
+          return Promise.reject('need login')
+        }
+        Message({message: data.msg, type: 'warning'})
         return Promise.reject('code err')
       }
+    case 301:
+      Message({message: data.msg, type: 'warning'})
+      return Promise.reject('need login')
     case 502:
-      Message({message: data.message, type: 'warning'})
+      Message({message: data.msg, type: 'warning'})
       return Promise.reject('密码错误')
   }
 }, err => {
@@ -46,4 +53,3 @@ export const getArtistDesc = params => http.get('/artist/desc', {params})
 export const getArtistSong = params => http.get('/artists', {params})
 export const getArtistMv = params => http.get('/artist/mv', {params})
 export const getArtistSimilar = params => http.get('/simi/artist', {params})
-

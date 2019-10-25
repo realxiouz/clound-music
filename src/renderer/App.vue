@@ -22,6 +22,7 @@
       this.$refs.audio.addEventListener('timeupdate', _ => {
         this.setPlayTime(this.$refs.audio.currentTime*1000)
       })
+      this.$refs.audio.volume = (this.$local.get('volume')||50)/100
       this.$root.$audio = this.$refs.audio
     },
     components: {
@@ -48,6 +49,7 @@ body{
   margin: 0;
   color: $light1;
   font-size: 12px;
+  font-family: Arial, Helvetica, sans-serif;
 }
 .app{
   display: flex;
