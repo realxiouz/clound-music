@@ -3,12 +3,12 @@
     <div class="pa-30 flex">
       <el-image style="width:200px;height:200px" :src="current.picUrl" class="mr-30"></el-image>
       <div class="flex-left">
-        <div>
+        <div class="flex">
           <div>
             <el-tag>歌手</el-tag>
             <span>{{current.name}}</span>
           </div>
-          
+          <button @click="handleSub">{{current.followed?'已收藏':'收藏'}}</button>
         </div>
         <div>
           单曲数:{{current.musicSize}}
@@ -41,10 +41,26 @@ import Album from '@/components/artist-album'
 import Mv from '@/components/artist-mv'
 import Similar from '@/components/artist-similar'
 import ADesc from '@/components/artist-desc'
+import { artistSub } from '@/common/api'
 
 export default {
   computed: {
     ...mapState('artist', ['current']),
+  },
+  methods: {
+    handleSub() {
+      if (this.current.followed) {
+        // cancel
+        return
+      }
+      let p = {
+        id: this.current.id,
+        t: 1
+      }
+      artistSub(p).then(r => {
+        
+      })
+    }
   },
   components: {
     Album,

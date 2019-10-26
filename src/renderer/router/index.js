@@ -8,6 +8,8 @@ import Sheet from '@/pages/sheet'
 import SongDetail from '@/pages/song-detail'
 import ArtistDetail from '@/pages/artist-detail'
 import AlbumDetail from '@/pages/album-detail'
+import Connection from '@/pages/connection'
+import MvDetail from '@/pages/mv-detail'
 
 Vue.use(Router)
 
@@ -41,12 +43,20 @@ export default new Router({
         {
           path: 'album-detail/:id?',
           component: AlbumDetail
+        },
+        {
+          path: 'connection',
+          component: Connection
         }
       ]
     },
     {
       path: '/song-detail',
       component: SongDetail
+    },
+    {
+      path: '/mv-detail/:id?',
+      component: MvDetail
     }
   ]
 })

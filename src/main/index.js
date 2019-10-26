@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, ipcMain } from 'electron'
 
 /**
  * Set `__static` path to static files in production
@@ -20,8 +20,11 @@ function createWindow () {
   mainWindow = new BrowserWindow({
     height: 670,
     useContentSize: true,
-    width: 1000
+    width: 1000,
+    frame: false,
   })
+
+  process.mini = false
 
   mainWindow.loadURL(winURL)
 
@@ -42,6 +45,27 @@ app.on('activate', () => {
   if (mainWindow === null) {
     createWindow()
   }
+})
+
+let mini
+ipcMain.on('mini', () => {
+  mini = new BrowserWindow({
+    height: 74,
+    width: 300,
+    frame: false,
+    alwaysOnTop: true,
+  })
+  process.mini = true
+  mini.loadURL(winURL)
+  mini.on('closed', () => {
+    mini = null
+  })
+})
+
+ipcMain.on('mini-done', _ => {
+  process.mini = false
+  mini.webContents.send('mainId', mainWindow.id)
+  mainWindow.webContents.send('miniId', mini.id)
 })
 
 /**

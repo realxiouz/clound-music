@@ -5,6 +5,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 Vue.use(Ele, {size: 'mini'})
 
 import App from './App'
+
 import router from './router'
 import store from './store'
 
@@ -21,5 +22,5 @@ new Vue({
   components: { App },
   router,
   store,
-  template: '<App/>'
+  template: '<App />'
 }).$mount('#app')

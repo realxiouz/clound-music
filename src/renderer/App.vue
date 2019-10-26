@@ -1,21 +1,54 @@
 <template>
   <div id="app" class="app">
-    <title-bar />
-    <div style="flex:1;height:0">
-      <router-view></router-view>
-    </div>
-    <audio :src="currentAudio.url" autoplay ref="audio"></audio>
+    <template v-if="!mini">
+      <title-bar />
+      <div style="flex:1;height:0">
+        <router-view></router-view>
+      </div>
+      <audio :src="currentAudio.url" autoplay ref="audio"></audio>
+
+      <el-dialog title="登录" width="300px" :visible="showLoginForm" :show-close="false">
+        <el-form :model="form" label-position="left" label-width="60px">
+          <el-form-item label="手机号">
+            <el-input v-model="form.phone" autocomplete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="密码">
+            <el-input v-model="form.password" autocomplete="off"></el-input>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button type="primary" @click="handleLogin">确 定</el-button>
+        </div>
+      </el-dialog>
+    </template>
+    <mini v-if="mini" />
   </div>
 </template>
 
 <script>
   import TitleBar from '@/components/title-bar'
+  import Mini from '@/components/mini-play'
+
   import { mapMutations, mapState, mapActions } from 'vuex'
+  import { loginByPhone } from '@/common/api'
 
   export default {
     name: 'chin',
     created() {
+      this.mini = this.$electron.remote.process.mini
       this._initApp()
+      this.$electron.ipcRenderer.on('miniId', (e, a) => {
+      console.log(a);
+    })
+    },
+    data() {
+      return {
+        form: {
+          phone: '',
+          password: ''
+        },
+        mini: false
+      }
     },
     mounted() {
       this.$refs.audio.addEventListener('ended', this.playNextAudio)
@@ -26,19 +59,34 @@
       this.$root.$audio = this.$refs.audio
     },
     components: {
-      TitleBar
+      TitleBar, Mini
     },
     computed: {
       ...mapState('play', ['currentAudio']),
+      ...mapState('auth', ['showLoginForm']),
     },
     methods: {
-      ...mapMutations('auth', ['setUser']),
+      ...mapMutations('auth', ['setUser', 'setShowLoginForm']),
       ...mapMutations('play', ['setPlayTime']),
       ...mapActions('play', ['playNextAudio']),
       _initApp() {
         let user = this.$local.get('user')
         user && this.setUser(user)
-      }
+      },
+      handleLogin() {
+        loginByPhone(this.form).then(r => {
+          this.$local.set('account', r.account)
+          this.$local.set('profile', r.profile)
+          let user = {
+            id: r.account.id,
+            avatar: r.profile.avatarUrl,
+            nickname: r.profile.nickname
+          }
+          this.setUser(user)
+          this.$local.set('user', user)
+          this.setShowLoginForm(false)
+        })
+      },
     }
   }
 </script>
@@ -50,6 +98,7 @@ body{
   color: $light1;
   font-size: 12px;
   font-family: Arial, Helvetica, sans-serif;
+  background-color: $dark1;
 }
 .app{
   display: flex;

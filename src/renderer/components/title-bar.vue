@@ -1,11 +1,14 @@
 <template>
   <div class="title-bar">
-    <div @click="$router.push('/main/find')">某云音乐</div>
+    <div class="no-drag" @click="$router.push('/main/find')">某云音乐</div>
     <el-button-group>
-      <el-button type="primary" icon="el-icon-edit" @click="handleBack"></el-button>
-      <el-button type="primary" icon="el-icon-share"></el-button>
+      <el-button class="no-drag" type="primary" icon="el-icon-edit" @click="handleBack"></el-button>
+      <el-button class="no-drag" type="primary" icon="el-icon-share"></el-button>
+      <el-button class="no-drag" type="primary" @click="handleMini">mini</el-button>
+      <el-button class="no-drag" type="primary" @click="handleMini1">mini1</el-button>
     </el-button-group>
     <el-autocomplete
+      class="no-drag"
       popper-class="my-autocomplete"
       v-model="state"
       :fetch-suggestions="querySearch"
@@ -23,29 +26,13 @@
     </el-autocomplete>
 
     <template v-if="!user.id">
-      <el-avatar icon="el-icon-user-solid" @click="showLogin"></el-avatar>
-      <span @click="showLogin">未登录</span>
+      <el-avatar class="no-drag" icon="el-icon-user-solid" @click="showLogin"></el-avatar>
+      <span class="no-drag" @click="showLogin">未登录</span>
     </template>
     <template v-else>
-      <el-avatar :src="user.avatar" @click="showLogin"></el-avatar>
-      <span @click="showLogin">{{user.nickname}}</span>
+      <el-avatar class="no-drag" :src="user.avatar" @click="showLogin"></el-avatar>
+      <span class="no-drag" @click="showLogin">{{user.nickname}}</span>
     </template>
-    
-
-    <el-dialog title="登录" width="300px" :visible.sync="dialogLogin">
-      <el-form :model="form" label-position="left" label-width="60px">
-        <el-form-item label="手机号">
-          <el-input v-model="form.phone" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="密码">
-          <el-input v-model="form.password" autocomplete="off"></el-input>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <!-- <el-button @click="dialogLogin = false">取 消</el-button> -->
-        <el-button type="primary" @click="handleLogin">确 定</el-button>
-      </div>
-    </el-dialog>
   </div>
 </template>
 
@@ -56,43 +43,31 @@ import { mapMutations, mapState } from 'vuex'
 export default {
   data() {
     return {
-      dialogLogin: false,
       state: '',
-      form: {
-        phone: '',
-        password: ''
-      }
     }
   },
   methods: {
-    ...mapMutations('auth', ['setUser']),
+    ...mapMutations('auth', ['setUser', 'setShowLoginForm']),
     querySearch() {},
     handleSelect() {},
     handleSearch() {
 
     },
     showLogin() {
-      this.dialogLogin = true
-    },
-    handleLogin() {
-      loginByPhone(this.form).then(r => {
-        this.$local.set('account', r.account)
-        this.$local.set('profile', r.profile)
-        let user = {
-          id: r.account.id,
-          avatar: r.profile.avatarUrl,
-          nickname: r.profile.nickname
-        }
-        this.setUser(user)
-        this.$local.set('user', user)
-        this.dialogLogin = false
-      })
+      this.setShowLoginForm(true)
     },
     handleBack() {
       this.$router.go(-1)
+    },
+    handleMini() {
+      this.$electron.ipcRenderer.send('mini')
+    },
+    handleMini1() {
+      this.$electron.remote.BrowserWindow.fromId(2).webContents.send('audio', JSON.stringify(this.currentAudio))
     }
   },
   computed: {
+    ...mapState('play', ['currentAudio']),
     ...mapState('auth', ['user'])
   }
 }
@@ -106,5 +81,6 @@ export default {
     color: #fff;
     display: flex;
     align-items: center;
+    // -webkit-app-region: drag;
   }
 </style>

@@ -61,6 +61,7 @@
           this.nolyric = false
           this.lyric = new Lyric(r.lrc.lyric, ({lineNum, txt}) => {
             this.line = lineNum
+            this.$electron.remote.BrowserWindow.fromId(2) && this.$electron.remote.BrowserWindow.fromId(2).webContents.send('lyric', txt)
           })
           if (!this.lyric.lines.length) {
             // todo lyric parse err

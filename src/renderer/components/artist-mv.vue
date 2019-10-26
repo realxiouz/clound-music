@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div v-for="(i, inx) in mvs" :key="inx">
+  <div class="flex wrap">
+    <div v-for="(i, inx) in mvs" :key="inx" style="width:160px" @click="handleMv(i)">
       <div>
         <el-image :src="i.imgurl" style="width:160px;height:90px"></el-image>
       </div>
@@ -33,6 +33,11 @@ export default {
       }
       getArtistMv(data).then(r => {
         this.mvs = r.mvs
+      })
+    },
+    handleMv(i) {
+      this.$router.push({
+        path: `/mv-detail/${i.id}`
       })
     }
   },

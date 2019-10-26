@@ -12,14 +12,9 @@ http.interceptors.response.use(res => {
     case 200:
       if (data.code === 200) {
         return data
-      } else {
-        if (data.code === 301) {
-          Message({message: data.msg, type: 'warning'})
-          return Promise.reject('need login')
-        }
-        Message({message: data.msg, type: 'warning'})
-        return Promise.reject('code err')
       }
+      Message({message: data.msg, type: 'warning'})
+      return Promise.reject('code err')
     case 301:
       Message({message: data.msg, type: 'warning'})
       return Promise.reject('need login')
@@ -53,3 +48,12 @@ export const getArtistDesc = params => http.get('/artist/desc', {params})
 export const getArtistSong = params => http.get('/artists', {params})
 export const getArtistMv = params => http.get('/artist/mv', {params})
 export const getArtistSimilar = params => http.get('/simi/artist', {params})
+export const artistSub = params => http.get('/artist/sub', {params}) // 收藏 取消收藏 歌手 {id: 1, t: 1}
+export const getArtistSubList = _ => http.get('/artist/sublist')
+
+// album
+export const getAlbumSubList = params => http('/album/sublist', {params})
+
+// mv
+export const getMvDetail = params => http.get('/mv/detail', {params}) // {mvid: }
+export const getMvUrl = params => http.get('/mv/url', {params}) // {id: }
