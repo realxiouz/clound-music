@@ -7,6 +7,9 @@ const state = {
   currentAudio: {
     al: {},
     dt: 0,
+    ar: [
+      {}
+    ],
   },
   playTime: 0, //单位 ms
   audioPlaying: false,

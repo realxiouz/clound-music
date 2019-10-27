@@ -11,6 +11,9 @@ import AlbumDetail from '@/pages/album-detail'
 import Connection from '@/pages/connection'
 import MvDetail from '@/pages/mv-detail'
 
+import Mini from '@/components/mini-play'
+
+
 Vue.use(Router)
 
 export default new Router({
@@ -57,6 +60,10 @@ export default new Router({
     {
       path: '/mv-detail/:id?',
       component: MvDetail
+    },
+    {
+      path: '/mini',
+      component: Mini
     }
   ]
 })

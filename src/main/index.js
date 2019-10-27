@@ -1,4 +1,7 @@
-import { app, BrowserWindow, ipcMain } from 'electron'
+import { app, BrowserWindow, ipcMain, Menu, Tray } from 'electron'
+
+const path = require('path')
+
 
 /**
  * Set `__static` path to static files in production
@@ -9,6 +12,7 @@ if (process.env.NODE_ENV !== 'development') {
 }
 
 let mainWindow
+let appTray = null
 const winURL = process.env.NODE_ENV === 'development'
   ? `http://localhost:9080`
   : `file://${__dirname}/index.html`
@@ -31,6 +35,23 @@ function createWindow () {
   mainWindow.on('closed', () => {
     mainWindow = null
   })
+
+  // let trayMenuTemplate = [
+  //   {
+  //       label: '设置',
+  //       click: function () {}
+  //   },
+  // ]
+
+  // appTray = new Tray('ico.ico')
+
+  // const contextMenu = Menu.buildFromTemplate(trayMenuTemplate);
+
+  // //设置此托盘图标的悬停提示内容
+  // appTray.setToolTip('This is my application.')
+
+  // //设置此图标的上下文菜单
+  // appTray.setContextMenu(contextMenu)
 }
 
 app.on('ready', createWindow)
@@ -54,11 +75,16 @@ ipcMain.on('mini', () => {
     width: 300,
     frame: false,
     alwaysOnTop: true,
+    resizable: false,
   })
   process.mini = true
+  // const winURL1 = process.env.NODE_ENV === 'development'
+  // ? `http://localhost:9080/#/mini`
+  // : `file://${__dirname}/index.html/#/mini`
   mini.loadURL(winURL)
   mini.on('closed', () => {
     mini = null
+    mainWindow.webContents.send('miniClose')
   })
 })
 
@@ -66,6 +92,10 @@ ipcMain.on('mini-done', _ => {
   process.mini = false
   mini.webContents.send('mainId', mainWindow.id)
   mainWindow.webContents.send('miniId', mini.id)
+})
+
+ipcMain.on('min', _ => {
+  mainWindow.minimize()
 })
 
 /**

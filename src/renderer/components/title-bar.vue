@@ -4,8 +4,8 @@
     <el-button-group>
       <el-button class="no-drag" type="primary" icon="el-icon-edit" @click="handleBack"></el-button>
       <el-button class="no-drag" type="primary" icon="el-icon-share"></el-button>
-      <el-button class="no-drag" type="primary" @click="handleMini">mini</el-button>
-      <el-button class="no-drag" type="primary" @click="handleMini1">mini1</el-button>
+      <!-- <el-button class="no-drag" type="primary" @click="handleMini">mini</el-button> -->
+      <!-- <el-button class="no-drag" type="primary" @click="handleMini1">mini1</el-button> -->
     </el-button-group>
     <el-autocomplete
       class="no-drag"
@@ -33,6 +33,10 @@
       <el-avatar class="no-drag" :src="user.avatar" @click="showLogin"></el-avatar>
       <span class="no-drag" @click="showLogin">{{user.nickname}}</span>
     </template>
+    <el-button-group>
+      <el-button class="no-drag" type="primary" @click="handleMini">mini</el-button>
+      <el-button class="no-drag" type="primary" @click="handleMin">min</el-button>
+    </el-button-group>
   </div>
 </template>
 
@@ -60,15 +64,22 @@ export default {
       this.$router.go(-1)
     },
     handleMini() {
+      if (this.miniId) {
+        return
+      }
       this.$electron.ipcRenderer.send('mini')
     },
+    handleMin() {
+      this.$electron.ipcRenderer.send('min')
+    },
     handleMini1() {
-      this.$electron.remote.BrowserWindow.fromId(2).webContents.send('audio', JSON.stringify(this.currentAudio))
+      this.miniId && this.$electron.remote.BrowserWindow.fromId(this.miniId).webContents.send('audio', JSON.stringify(this.currentAudio))
     }
   },
   computed: {
     ...mapState('play', ['currentAudio']),
-    ...mapState('auth', ['user'])
+    ...mapState('auth', ['user']),
+    ...mapState('mini', ['miniId']),
   }
 }
 </script>

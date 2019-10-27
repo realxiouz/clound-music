@@ -36,10 +36,24 @@
     name: 'chin',
     created() {
       this.mini = this.$electron.remote.process.mini
-      this._initApp()
-      this.$electron.ipcRenderer.on('miniId', (e, a) => {
-      console.log(a);
-    })
+      if (!this.mini) {
+        this._initApp()
+        this.$electron.ipcRenderer.on('miniId', (e, a) => {
+          this.setMiniId(a)
+        })
+        this.$electron.ipcRenderer.on('miniClose', (e, a) => {
+          this.setMiniId(0)
+        })
+        this.$electron.ipcRenderer.on('nextFromMini', _ => {
+          this.playNextAudio()
+        })
+        this.$electron.ipcRenderer.on('preFromMini', (e, a) => {
+          this.playPreAudio()
+        })
+        this.$electron.ipcRenderer.on('toggleFromMini', (e, a) => {
+          // this.setMiniId(a)
+        })
+      }
     },
     data() {
       return {
@@ -51,12 +65,14 @@
       }
     },
     mounted() {
-      this.$refs.audio.addEventListener('ended', this.playNextAudio)
-      this.$refs.audio.addEventListener('timeupdate', _ => {
-        this.setPlayTime(this.$refs.audio.currentTime*1000)
-      })
-      this.$refs.audio.volume = (this.$local.get('volume')||50)/100
-      this.$root.$audio = this.$refs.audio
+      if (!this.mini) {
+        this.$refs.audio.addEventListener('ended', this.playNextAudio)
+        this.$refs.audio.addEventListener('timeupdate', _ => {
+          this.setPlayTime(this.$refs.audio.currentTime*1000)
+        })
+        this.$refs.audio.volume = (this.$local.get('volume')||50)/100
+        this.$root.$audio = this.$refs.audio
+      }
     },
     components: {
       TitleBar, Mini
@@ -68,7 +84,8 @@
     methods: {
       ...mapMutations('auth', ['setUser', 'setShowLoginForm']),
       ...mapMutations('play', ['setPlayTime']),
-      ...mapActions('play', ['playNextAudio']),
+      ...mapMutations('mini', ['setMiniId']),
+      ...mapActions('play', ['playNextAudio','playPreAudio']),
       _initApp() {
         let user = this.$local.get('user')
         user && this.setUser(user)

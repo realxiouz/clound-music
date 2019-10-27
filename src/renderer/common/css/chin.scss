@@ -54,3 +54,7 @@
 .no-drag{
   -webkit-user-drag: none;
 }
+
+.drag{
+  -webkit-app-region: drag;
+}
