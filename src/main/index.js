@@ -1,8 +1,5 @@
 import { app, BrowserWindow, ipcMain, Menu, Tray } from 'electron'
 
-const path = require('path')
-
-
 /**
  * Set `__static` path to static files in production
  * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-static-assets.html
@@ -28,7 +25,7 @@ function createWindow () {
     frame: false,
   })
 
-  process.mini = false
+  // process.mini = false
 
   mainWindow.loadURL(winURL)
 
@@ -36,25 +33,49 @@ function createWindow () {
     mainWindow = null
   })
 
-  // let trayMenuTemplate = [
-  //   {
-  //       label: '设置',
-  //       click: function () {}
-  //   },
-  // ]
+  let trayMenuTemplate = [
+    {
+        label: '设置',
+        click: function () {
+          mainWindow.show()
+        }
+    },
+  ]
 
-  // appTray = new Tray('ico.ico')
+  let iconPath = `${__static}/ico.ico`
+  appTray = new Tray(iconPath)
 
-  // const contextMenu = Menu.buildFromTemplate(trayMenuTemplate);
+  const contextMenu = Menu.buildFromTemplate(trayMenuTemplate);
 
-  // //设置此托盘图标的悬停提示内容
-  // appTray.setToolTip('This is my application.')
+  appTray.setToolTip('This is my application.')
 
-  // //设置此图标的上下文菜单
-  // appTray.setContextMenu(contextMenu)
+  appTray.setContextMenu(contextMenu)
 }
 
-app.on('ready', createWindow)
+function createMini () {
+  mini = new BrowserWindow({
+    height: 74,
+    width: 300,
+    frame: false,
+    alwaysOnTop: true,
+    resizable: false,
+    show: false,
+  })
+  // process.mini = true
+  const winURL1 = process.env.NODE_ENV === 'development'
+  ? `http://localhost:9080/#/mini`
+  : `file://${__dirname}/index.html/#/mini`
+  mini.loadURL(winURL1)
+  mini.on('closed', () => {
+    mini = null
+    mainWindow.webContents.send('miniClose')
+  })
+}
+
+app.on('ready', _ => {
+  createWindow()
+  createMini()
+})
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
@@ -69,33 +90,14 @@ app.on('activate', () => {
 })
 
 let mini
-ipcMain.on('mini', () => {
-  mini = new BrowserWindow({
-    height: 74,
-    width: 300,
-    frame: false,
-    alwaysOnTop: true,
-    resizable: false,
-  })
-  process.mini = true
-  // const winURL1 = process.env.NODE_ENV === 'development'
-  // ? `http://localhost:9080/#/mini`
-  // : `file://${__dirname}/index.html/#/mini`
-  mini.loadURL(winURL)
-  mini.on('closed', () => {
-    mini = null
-    mainWindow.webContents.send('miniClose')
-  })
-})
 
 ipcMain.on('mini-done', _ => {
-  process.mini = false
   mini.webContents.send('mainId', mainWindow.id)
   mainWindow.webContents.send('miniId', mini.id)
 })
 
 ipcMain.on('min', _ => {
-  mainWindow.minimize()
+  mainWindow.hide()
 })
 
 /**

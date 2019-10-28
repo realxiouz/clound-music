@@ -57,3 +57,6 @@ export const getAlbumSubList = params => http('/album/sublist', {params})
 // mv
 export const getMvDetail = params => http.get('/mv/detail', {params}) // {mvid: }
 export const getMvUrl = params => http.get('/mv/url', {params}) // {id: }
+
+// 收藏的歌单
+export const getMySheet = params => http.get('/user/playlist', {params}) // {uid}

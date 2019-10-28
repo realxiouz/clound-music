@@ -1,59 +1,42 @@
 <template>
   <div id="app" class="app">
-    <template v-if="!mini">
+    <template v-if="$route.path != '/mini'">
       <title-bar />
-      <div style="flex:1;height:0">
-        <router-view></router-view>
-      </div>
-      <audio :src="currentAudio.url" autoplay ref="audio"></audio>
-
-      <el-dialog title="登录" width="300px" :visible="showLoginForm" :show-close="false">
-        <el-form :model="form" label-position="left" label-width="60px">
-          <el-form-item label="手机号">
-            <el-input v-model="form.phone" autocomplete="off"></el-input>
-          </el-form-item>
-          <el-form-item label="密码">
-            <el-input v-model="form.password" autocomplete="off"></el-input>
-          </el-form-item>
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="handleLogin">确 定</el-button>
-        </div>
-      </el-dialog>
+      <mini-ipc />
+      <audio-lyric />
     </template>
-    <mini v-if="mini" />
+    <div style="flex:1;height:0">
+      <router-view></router-view>
+    </div>
+
+    <el-dialog title="登录" width="300px" :visible="showLoginForm" :show-close="false">
+      <el-form :model="form" label-position="left" label-width="60px">
+        <el-form-item label="手机号">
+          <el-input v-model="form.phone" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="密码">
+          <el-input v-model="form.password" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="handleLogin">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
   import TitleBar from '@/components/title-bar'
-  import Mini from '@/components/mini-play'
+  import MiniIpc from '@/components/mini-ipc'
+  import AudioLyric from '@/components/audio-lyric'
 
   import { mapMutations, mapState, mapActions } from 'vuex'
-  import { loginByPhone } from '@/common/api'
+  import { loginByPhone, getMySheet } from '@/common/api'
 
   export default {
     name: 'chin',
     created() {
-      this.mini = this.$electron.remote.process.mini
-      if (!this.mini) {
-        this._initApp()
-        this.$electron.ipcRenderer.on('miniId', (e, a) => {
-          this.setMiniId(a)
-        })
-        this.$electron.ipcRenderer.on('miniClose', (e, a) => {
-          this.setMiniId(0)
-        })
-        this.$electron.ipcRenderer.on('nextFromMini', _ => {
-          this.playNextAudio()
-        })
-        this.$electron.ipcRenderer.on('preFromMini', (e, a) => {
-          this.playPreAudio()
-        })
-        this.$electron.ipcRenderer.on('toggleFromMini', (e, a) => {
-          // this.setMiniId(a)
-        })
-      }
+      this._initApp()
     },
     data() {
       return {
@@ -61,21 +44,10 @@
           phone: '',
           password: ''
         },
-        mini: false
-      }
-    },
-    mounted() {
-      if (!this.mini) {
-        this.$refs.audio.addEventListener('ended', this.playNextAudio)
-        this.$refs.audio.addEventListener('timeupdate', _ => {
-          this.setPlayTime(this.$refs.audio.currentTime*1000)
-        })
-        this.$refs.audio.volume = (this.$local.get('volume')||50)/100
-        this.$root.$audio = this.$refs.audio
       }
     },
     components: {
-      TitleBar, Mini
+      TitleBar, MiniIpc, AudioLyric
     },
     computed: {
       ...mapState('play', ['currentAudio']),
@@ -83,9 +55,6 @@
     },
     methods: {
       ...mapMutations('auth', ['setUser', 'setShowLoginForm']),
-      ...mapMutations('play', ['setPlayTime']),
-      ...mapMutations('mini', ['setMiniId']),
-      ...mapActions('play', ['playNextAudio','playPreAudio']),
       _initApp() {
         let user = this.$local.get('user')
         user && this.setUser(user)
@@ -102,6 +71,10 @@
           this.setUser(user)
           this.$local.set('user', user)
           this.setShowLoginForm(false)
+
+          return getMySheet({uid: r.account.id})
+        }).then(r => {
+          console.log(r)
         })
       },
     }

@@ -4,8 +4,6 @@
     <el-button-group>
       <el-button class="no-drag" type="primary" icon="el-icon-edit" @click="handleBack"></el-button>
       <el-button class="no-drag" type="primary" icon="el-icon-share"></el-button>
-      <!-- <el-button class="no-drag" type="primary" @click="handleMini">mini</el-button> -->
-      <!-- <el-button class="no-drag" type="primary" @click="handleMini1">mini1</el-button> -->
     </el-button-group>
     <el-autocomplete
       class="no-drag"
@@ -64,17 +62,16 @@ export default {
       this.$router.go(-1)
     },
     handleMini() {
-      if (this.miniId) {
-        return
-      }
+      // if (this.miniId) {
+      //   return
+      // }
       this.$electron.ipcRenderer.send('mini')
     },
     handleMin() {
-      this.$electron.ipcRenderer.send('min')
+      // this.$electron.ipcRenderer.send('min')
+      this.$electron.remote.BrowserWindow.fromId(2).show()
+      this.$electron.remote.BrowserWindow.fromId(1).hide()
     },
-    handleMini1() {
-      this.miniId && this.$electron.remote.BrowserWindow.fromId(this.miniId).webContents.send('audio', JSON.stringify(this.currentAudio))
-    }
   },
   computed: {
     ...mapState('play', ['currentAudio']),

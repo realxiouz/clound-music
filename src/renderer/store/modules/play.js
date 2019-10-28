@@ -2,6 +2,8 @@
 import { getSongUrl } from '@/common/api'
 
 const state = {
+  lyricLines: [],
+  currentLine: 0,
   listAudio: [],
   indexAudio: 0,
   currentAudio: {
@@ -31,6 +33,12 @@ const mutations = {
   },
   setPlayTime(s, t) {
     s.playTime = t
+  },
+  setLyricLines(s, l) {
+    s.lyricLines = l
+  },
+  setCurrentLine(s, l) {
+    s.currentLine = l
   }
 }
 
@@ -82,6 +90,10 @@ const actions = {
     commit('setIndexAudio', 0)
     commit('setListAudio', list)
     dispatch('playAudio')
+  },
+
+  getLines() {
+    
   }
 }
 

@@ -52,9 +52,11 @@
 }
 
 .no-drag{
-  -webkit-user-drag: none;
+  -webkit-app-region: none;
 }
 
 .drag{
+  // -webkit-app-region: drag;
+  -webkit-user-select: none;
   -webkit-app-region: drag;
 }

@@ -11,13 +11,13 @@
             <div @click="handleSheet">来源:{{}}</div>
           </div>
           <div class="lyric-wrap" style="width:400px;height:364px;overflow:hidden;margin-top:20px" id="wrap">
-            <div v-if="lyric&&lyric.lines&&lyric.lines.length">
+            <div>
               <div
-                v-for="(i, inx) in lyric.lines"
+                v-for="(i, inx) in lyricLines"
                 :key="inx"
                 :id="`lyric${inx}`"
                 class="lyric"
-                :class="{active: line=== inx}"
+                :class="{active:currentLine===inx}"
               >
                 {{i.txt}}
               </div>
@@ -34,48 +34,22 @@
 <script>
   import BScroll from 'better-scroll'
   import FooterBar from '@/components/footer'
-  import { getSongLyric } from '@/common/api'
-  import Lyric from '@/common/js/lyric'
   import { mapState, mapMutations } from 'vuex'
 
   export default {
     data() {
       return {
-        lyric: null,
-        line: 0,
         nolyric: false,
         scroll: null
       }
     },
     computed: {
-      ...mapState('play', ['playTime', 'currentAudio', 'audioPlaying']),
+      ...mapState('play', ['playTime', 'currentAudio', 'audioPlaying', 'lyricLines', 'currentLine']),
       ...mapState('mini', ['miniId'])
     },
     methods: {
       ...mapMutations('artist', ['setCurrent']),
-      _getLyric(id) {
-        getSongLyric({id}).then(r => {
-          if (r.nolyric) {
-            this.nolyric = true
-            return
-          }
-          this.nolyric = false
-          this.lyric = new Lyric(r.lrc.lyric, ({lineNum, txt}) => {
-            this.line = lineNum
-            this.miniId && this.$electron.remote.BrowserWindow.fromId(this.miniId).webContents.send('lyric', txt)
-          })
-          if (!this.lyric.lines.length) {
-            // todo lyric parse err
-            console.log(this.lyric.lrc)
-            console.log(this.lyric.lines)
-          }
-          this.lyric.seek(this.playTime)
-          this.$root.$lyric = this.lyric
-          this.$nextTick(_ => {
-            this.scroll = new BScroll('#wrap')
-          })
-        })
-      },
+      
       handleArtist() {
         this.setCurrent(this.currentAudio.ar[0])
         this.$router.push({
@@ -92,22 +66,15 @@
     watch: {
       'currentAudio.id': {
         handler(val) {
-          this.lyric && this.lyric.stop()
-          this.lyric = null
-          this.line = 0
-          this.$root.$lyric = null
-          val && this._getLyric(val)
           this.scroll && this.scroll.destroy()
           this.scroll = null
+          this.$nextTick(_ => {
+            this.scroll = new BScroll('#wrap')
+          })
         },
         immediate: true
       },
-      'audioPlaying': {
-        handler(val) {
-          this.lyric && this.lyric.togglePlay()
-        }
-      },
-      'line': {
+      'currentLine': {
         handler(val) {
           this.scroll && this.scroll.scrollToElement(`#lyric${val}`, 300, null, true)
         }

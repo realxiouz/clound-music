@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <div style="background-color: #292C33">
     <div class="flex main align-center">
       <el-image :src="currentAudio.al.picUrl" class="img-alb drag"></el-image>
-      <div class="toggle" style="width:100px">
+      <div class="toggle" style="width:100px;height:100%;">
         <div class="action">
           <el-tag @click="pre">x</el-tag>
           <el-tag @click="togglePlay">p</el-tag>
@@ -13,8 +13,12 @@
           <div>{{currentAudio.ar[0].name}}</div>
         </div>
       </div>
+      <div>
+        <el-tag @click="max">max</el-tag>
+        <el-tag @click="min">max</el-tag>
+      </div>
     </div>
-    <div class="lyric text-dot drag" v-if="lyric">{{lyric}}</div>
+    <div class="lyric text-dot drag">{{lyric}}</div>
   </div>
 </template>
 
@@ -51,6 +55,13 @@ export default {
     togglePlay() {
       this.mainId && this.$electron.remote.BrowserWindow.fromId(this.mainId).webContents.send('toggleFromMini')
     },
+    max() {
+      this.$electron.remote.BrowserWindow.fromId(1).show()
+      this.$electron.remote.BrowserWindow.fromId(2).hide()
+    },
+    min() {
+      this.$electron.remote.BrowserWindow.fromId(2).hide()
+    }
   },
   data() {
     return {
@@ -64,7 +75,6 @@ export default {
 @import '../common/css/var.scss';
 .main{
   height: 44px;
-  background-color: $dark1;
   .img-alb{
     width: 44px;
     height: 44px;
@@ -88,7 +98,6 @@ export default {
   }
 }
 .lyric{
-    background-color: $dark1;
     text-align: center;
     color: $light1;
     padding: 0 5px;
