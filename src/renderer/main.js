@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Ele from 'element-ui'
 import '@/common/css/chin.scss'
-import 'element-ui/lib/theme-chalk/index.css'
+import '@/common/css/element-var.scss'
 Vue.use(Ele, {size: 'mini'})
 
 import App from './App'

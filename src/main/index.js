@@ -11,8 +11,8 @@ if (process.env.NODE_ENV !== 'development') {
 let mainWindow
 let appTray = null
 const winURL = process.env.NODE_ENV === 'development'
-  ? `http://localhost:9080`
-  : `file://${__dirname}/index.html`
+  ? `http://localhost:9080/#/main/find`
+  : `file://${__dirname}/index.html/#/main/find`
 
 function createWindow () {
   /**
@@ -23,11 +23,17 @@ function createWindow () {
     useContentSize: true,
     width: 1000,
     frame: false,
+    backgroundColor: '#16181C',
+    show: false
   })
 
   // process.mini = false
 
   mainWindow.loadURL(winURL)
+
+  mainWindow.once('ready-to-show', () => {
+    mainWindow.show()
+  })
 
   mainWindow.on('closed', () => {
     mainWindow = null
@@ -35,10 +41,16 @@ function createWindow () {
 
   let trayMenuTemplate = [
     {
-        label: '设置',
+        label: '完整模式',
         click: function () {
           mainWindow.show()
         }
+    },
+    {
+      label: '关闭',
+      click: function () {
+        app.quit()
+      }
     },
   ]
 
@@ -76,6 +88,7 @@ app.on('ready', _ => {
   createWindow()
   createMini()
 })
+
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {

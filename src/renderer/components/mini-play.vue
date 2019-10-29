@@ -2,20 +2,21 @@
   <div style="background-color: #292C33">
     <div class="flex main align-center">
       <el-image :src="currentAudio.al.picUrl" class="img-alb drag"></el-image>
-      <div class="toggle" style="width:100px;height:100%;">
-        <div class="action">
-          <el-tag @click="pre">x</el-tag>
-          <el-tag @click="togglePlay">p</el-tag>
-          <el-tag @click="next">n</el-tag>
+      <div class="toggle" style="width:160px;height:100%;">
+        <div class="action flex align-center between" style="width:100%;height:100%">
+          <i @click="pre" class="el-icon-caret-left pointer" style="font-size:24px;"></i>
+          <i @click="togglePlay" :class="audioPlaying?'el-icon-video-pause':'el-icon-video-play'" class="pointer" style="font-size:36px"></i>
+          <i @click="next" class="el-icon-caret-right pointer" style="font-size:24px"></i>
         </div>
-        <div class="info">
-          <div>{{currentAudio.name}}</div>
-          <div>{{currentAudio.ar[0].name}}</div>
+        <div class="info flex direction between">
+          <div class="song text-dot">{{currentAudio.name}}</div>
+          <div class="ar text-dot">{{currentAudio.ar[0].name}}</div>
         </div>
       </div>
-      <div>
-        <el-tag @click="max">max</el-tag>
-        <el-tag @click="min">max</el-tag>
+      <div class="flex-left flex align-center between" style="padding: 0 5px">
+        <i class="el-icon-star-on pointer" style="font-size:24px;"></i>
+        <i class="el-icon-minus pointer" style="font-size:24px;" @click="min"></i>
+        <i class="el-icon-rank pointer" style="font-size:24px;" @click="max"></i>
       </div>
     </div>
     <div class="lyric text-dot drag">{{lyric}}</div>
@@ -54,6 +55,7 @@ export default {
     },
     togglePlay() {
       this.mainId && this.$electron.remote.BrowserWindow.fromId(this.mainId).webContents.send('toggleFromMini')
+      this.audioPlaying = !this.audioPlaying
     },
     max() {
       this.$electron.remote.BrowserWindow.fromId(1).show()
@@ -65,7 +67,8 @@ export default {
   },
   data() {
     return {
-      lyric: ''
+      lyric: '',
+      audioPlaying: true,
     }
   }
 }
@@ -83,16 +86,28 @@ export default {
   .toggle{
     .action{
       display: none;
+      padding: 0 20px;
+      box-sizing: border-box;
     }
     .info{
-      display: block;
+      display: flex;
+      padding: 5px 10px;
+      box-sizing: border-box;
+      height: 100%;
+      .song{
+        color: $light1;
+        font-size: 14px;
+      }
+      .ar{
+        color: $light2;
+      }
     }
     &:hover{
       .info{
         display: none;
       }
       .action{
-        display: block;
+        display: flex;
       }
     }
   }

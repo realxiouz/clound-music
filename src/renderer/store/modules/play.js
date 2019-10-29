@@ -1,7 +1,9 @@
 
 import { getSongUrl } from '@/common/api'
+import { Message } from 'element-ui'
 
 const state = {
+  playMode: 1, //1->顺序 2->列表循环 3->单曲循环 4->随机
   lyricLines: [],
   currentLine: 0,
   listAudio: [],
@@ -19,6 +21,9 @@ const state = {
 }
 
 const mutations = {
+  setPlayMode(s, n) {
+    s.playMode = n
+  },
   setListAudio(s, l) {
     s.listAudio = l
   },
@@ -73,10 +78,32 @@ const actions = {
     }
   },
   playNextAudio({dispatch, state, commit}) {
-    if (state.indexAudio === state.listAudio.length -1 ) {
+    let inx
+    switch(state.playMode) {
+      case 1:
+        inx = state.indexAudio + 1
+        break
+      case 2:
+        inx = state.indexAudio + 1 === state.listAudio.length ? 0 : state.indexAudio + 1
+        break
+      case 3:
+        inx = state.indexAudio
+        break
+      case 4:
+        inx = Math.floor(Math.random()*state.listAudio.length)
+        break
+    }
+    if (inx === state.listAudio.length) {
+      // 全部播放完毕
+      console.log('全部播放完毕')
+      // Message({message: '全部播放完毕', type: 'warning'})
+      let notification = new Notification('标题', {
+        body: '全部播放完毕'
+      })
+      commit('setAudioPlaying', false)
       return
     }
-    commit('setIndexAudio', state.indexAudio + 1)
+    commit('setIndexAudio', inx)
     dispatch('playAudio')
   },
   playPreAudio({dispatch, state, commit}) {
@@ -87,11 +114,14 @@ const actions = {
     dispatch('playAudio')
   },
   playSongSheet({commit, dispatch}, list) {
-    commit('setIndexAudio', 0)
     commit('setListAudio', list)
+    commit('setIndexAudio', 0)
     dispatch('playAudio')
   },
-
+  playFromIndex({commit, dispatch}, inx) {
+    commit('setIndexAudio', inx)
+    dispatch('playAudio')
+  },
   getLines() {
     
   }

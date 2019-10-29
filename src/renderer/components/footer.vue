@@ -1,9 +1,9 @@
 <template>
   <div class="footer flex align-center">
-    <div class="control flex between">
-      <el-button type="primary" icon="el-icon-edit" circle @click="handlePre"></el-button>
-      <el-button type="primary" icon="el-icon-edit" circle @click="handlePlay"></el-button>
-      <el-button type="primary" icon="el-icon-edit" circle @click="handleNext"></el-button>
+    <div class="control flex between align-center">
+      <i @click="handlePre" class="el-icon-caret-left pointer" style="font-size:24px;"></i>
+      <i @click="handlePlay" :class="audioPlaying?'el-icon-video-pause':'el-icon-video-play'" class="pointer" style="font-size:36px"></i>
+      <i @click="handleNext" class="el-icon-caret-right pointer" style="font-size:24px"></i>
     </div>
     <div class="progress flex align-center" style="width:450px">
       <span>{{playTime|songLength}}</span>
@@ -12,6 +12,7 @@
         class="flex-left"
         style="margin:0 10px 0 15px"
         :min="0"
+        :show-tooltip="false"
         :max="currentAudio.dt/1000"
         @change="handleSeek"/>
       <span>{{currentAudio.dt|songLength}}</span>
@@ -25,7 +26,9 @@
         :max="100"
         @change="handleVolumeChange"/>
     </div>
-    <div class="flex-left"></div>
+    <div class="pointer" @click="toggleMode">
+      <el-tag effect="dark">{{modeObj[this.playMode]}}</el-tag>
+    </div>
     <div v-if="listAudio.length" @click="showSongSheet=!showSongSheet">
       歌单-{{listAudio.length}}
     </div>
@@ -39,6 +42,14 @@ import { mapMutations, mapState, mapActions } from 'vuex'
 import DialogSheet from './dialog-song-sheet'
 
 export default {
+  created() {
+    this.modeObj = {
+      1: '顺序播放',
+      2: '列表循环',
+      3: '单曲循环',
+      4: '随机播放',
+    }
+  },
   data() {
     return {
       volume: this.$local.get('volume') || 49,
@@ -47,10 +58,10 @@ export default {
     }
   },
   computed: {
-    ...mapState('play', ['currentAudio', 'playTime', 'audioPlaying', 'listAudio']),
+    ...mapState('play', ['currentAudio', 'playTime', 'audioPlaying', 'listAudio', 'playMode']),
   },
   methods: {
-    ...mapMutations('play', ['setAudioPlaying']),
+    ...mapMutations('play', ['setAudioPlaying', 'setPlayMode']),
     ...mapActions('play', ['playNextAudio', 'playPreAudio']),
     handleNext() {
       this.playNextAudio()
@@ -74,6 +85,9 @@ export default {
     handleVolumeChange(val) {
       this.$root.$audio.volume = val/100
       this.$local.set('volume', val)
+    },
+    toggleMode() {
+      this.setPlayMode(this.playMode + 1 === 5 ? 1 : this.playMode + 1)
     }
   },
   watch: {

@@ -70,9 +70,9 @@
   import { mapActions, mapMutations, mapState } from 'vuex'
 
   export default {
-    created() {
-      this._getData()
-    },
+    // created() {
+    //   this._getData()
+    // },
     data() {
       return {
         playList: {
@@ -82,6 +82,11 @@
           tags: []
         }
       }
+    },
+    beforeRouteEnter (to, from, next) {
+      next(vm => {
+        vm._getData()
+      })
     },
     methods: {
       ...mapActions('play', ['playAudio', 'playSongSheet']),

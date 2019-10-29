@@ -23,7 +23,8 @@ export default {
       handler(val) {
         this.lyric && this.lyric.stop()
         this.lyric = null
-        this.line = 0
+        this.setLyricLines([])
+        this.setCurrentLine(0)
         this.$root.$lyric = null
         val && this._getLyric(val)
       },
@@ -34,9 +35,14 @@ export default {
         this.lyric && this.lyric.togglePlay()
       }
     },
+    'playMode': {
+      handler(v) {
+        v === 3 ? this.$refs.audio.loop = true : this.$refs.audio.loop = false
+      }
+    }
   },
   computed: {
-    ...mapState('play', ['playTime', 'currentAudio', 'audioPlaying']),
+    ...mapState('play', ['playTime', 'currentAudio', 'audioPlaying', 'playMode']),
     ...mapState('mini', ['miniId'])
   },
   data() {
@@ -46,7 +52,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('play', ['setCurrentLine', 'setLyricLines', 'setPlayTime']),
+    ...mapMutations('play', ['setCurrentLine', 'setLyricLines', 'setPlayTime', 'setLyricLines', 'setCurrentLine']),
     ...mapActions('play', ['playNextAudio']),
     _getLyric(id) {
       getSongLyric({id}).then(r => {

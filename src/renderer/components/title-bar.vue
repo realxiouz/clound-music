@@ -2,7 +2,7 @@
   <div class="title-bar">
     <div class="no-drag" @click="$router.push('/main/find')">某云音乐</div>
     <el-button-group>
-      <el-button class="no-drag" type="primary" icon="el-icon-edit" @click="handleBack"></el-button>
+      <el-button :disabled="!canBack" class="no-drag" type="primary" icon="el-icon-edit" @click="handleBack"></el-button>
       <el-button class="no-drag" type="primary" icon="el-icon-share"></el-button>
     </el-button-group>
     <el-autocomplete
@@ -77,6 +77,16 @@ export default {
     ...mapState('play', ['currentAudio']),
     ...mapState('auth', ['user']),
     ...mapState('mini', ['miniId']),
+    canBack() {
+      return history.length > 1
+    }
+  },
+  watch: {
+    // 'history.length': {
+    //   handler(v) {
+    //     this.canBack = v > 1
+    //   }
+    // }
   }
 }
 </script>

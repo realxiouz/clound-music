@@ -2,22 +2,32 @@
   <div>
     <div class="d-mask" :class="{show: value}" @click="$emit('input', false)"></div>
     <div class="d-wrap" :class="{show: value}" >
-      <div v-for="(i, inx) in listAudio" :key="inx" class="flex">
-        <div class="flex">
-          <div style="width:20px">{{calcIndex(i, inx)}}</div>
-          <div class="flex-left text-dot" style="width:340px">{{i.name}}{{i.alia.length?i.alia[0]:''}}</div>
-            <div></div>
+      <div class="scroll-wrap" style="height:100%;over-flow:hidden">
+        <div>
+          <div
+            @dblclick="playSel(inx)"
+            :id="`song${i.id}`"
+            v-for="(i, inx) in listAudio" :key="inx" class="flex align-center" style="height:25px;">
+            <div style="width:30px;" class="flex align-center">
+              <i
+              v-if="currentAudio.id === i.id"
+              class="el-icon-caret-right"
+              style="color:#B82525;font-size:20px" />
+            </div>
+            <div class="flex-left text-dot" style="width:340px">{{i.name}}{{i.alia.length?i.alia[0]:''}}</div>
+            <div class="text-dot" style="width:100px">{{ i.ar.map(i => i.name).join('/') }}</div>
+            <!-- <div class="text-dot">{{ i.al.name }}</div> -->
+            <div>{{ i.dt | songLength }}</div>
           </div>
-          <div class="text-dot" style="width:110px">{{ i.ar.map(i => i.name).join('/') }}</div>
-          <div class="text-dot">{{ i.al.name }}</div>
-          <span>{{ i.dt | songLength }}</span>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
+import BScroll from 'better-scroll'
 
 export default {
   props: {
@@ -25,14 +35,34 @@ export default {
       type: Boolean
     }
   },
+  data() {
+    return {
+      scroll: null
+    }
+  },
   methods: {
-    calcIndex(i, inx) {
-      return this.currentAudio.id == i.id ? '播放' : inx + 1
+    ...mapActions('play', ['playFromIndex']),
+    playSel(inx) {
+      this.playFromIndex(inx)
     }
   },
   computed: {
     ...mapState('play', ['listAudio', 'currentAudio'])
   },
+  watch: {
+    'listAudio': {
+      handler(v) {
+        this.$nextTick(_ => {
+          this.scroll = new BScroll('.scroll-wrap')
+        })
+      }
+    },
+    'currentAudio.id': {
+      handler(val) {
+        this.scroll && this.scroll.scrollToElement(`#song${val}`, 300, null, true)
+      }
+    }
+  }
 }
 </script>
 
