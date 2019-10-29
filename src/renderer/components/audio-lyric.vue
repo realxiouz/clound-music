@@ -37,8 +37,11 @@ export default {
     },
     'playMode': {
       handler(v) {
-        v === 3 ? this.$refs.audio.loop = true : this.$refs.audio.loop = false
-      }
+        this.$nextTick(_ => {
+          v === 3 ? this.$refs.audio.loop = true : this.$refs.audio.loop = false
+        })
+      },
+      immediate: true
     }
   },
   computed: {
