@@ -31,7 +31,7 @@
   import AudioLyric from '@/components/audio-lyric'
 
   import { mapMutations, mapState, mapActions } from 'vuex'
-  import { loginByPhone, getMySheet } from '@/common/api'
+  import { loginByPhone, getMySheet, likeSongList } from '@/common/api'
 
   export default {
     name: 'chin',
@@ -55,7 +55,7 @@
     },
     methods: {
       ...mapMutations('auth', ['setUser', 'setShowLoginForm']),
-      ...mapMutations('play', ['setPlayMode']),
+      ...mapMutations('play', ['setPlayMode', 'setLikeList']),
       _initApp() {
         let user = this.$local.get('user')
         user && this.setUser(user)
@@ -76,9 +76,12 @@
           this.$local.set('user', user)
           this.setShowLoginForm(false)
 
-          return getMySheet({uid: r.account.id})
+          return Promise.all([
+            getMySheet({uid: r.account.id}),
+            likeSongList({uid: r.account.id})
+          ]) 
         }).then(r => {
-          console.log(r)
+          this.setLikeList(r[1].ids)
         })
       },
     }

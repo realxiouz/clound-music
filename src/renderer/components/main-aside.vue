@@ -8,23 +8,26 @@
         </div>
       </div>
     </div>
-    <div class="mini-player flex" v-if="listAudio.length" >
+    <div class="mini-player flex align-center" v-if="listAudio.length" >
       <el-image :src="currentAudio.al.picUrl" style="width:45px;height:45px;margin-right:4px"></el-image>
-      <div class="flex-left flex direction between" style="padding: 5px 0">
+      <div class="flex-left flex direction between" style="height:36px">
         <div>
-          <span class="song" @click="handleDetail">{{currentAudio.name}}</span>
+          <span class="song text-dot" @click="handleDetail">{{currentAudio.name}}</span>
         </div>
         <div>
-          <span class="artist" @click="handleArtist">{{currentAudio.ar[0].name}}</span>
+          <span class="artist text-dot" @click="handleArtist">{{currentAudio.ar[0].name}}</span>
         </div>
       </div>
+      <span style="font-size:20px" :class="{'color-p': currentAudio.like}" class="pointer" @click="handleLike">
+        <icon-svg name="like"></icon-svg>
+      </span>
     </div>
   </div>
 </template>
 
 <script>
 import menu from '@/common/data/menu'
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 
 export default {
   data() {
@@ -33,10 +36,14 @@ export default {
     }
   },
   computed: {
-    ...mapState('play', ['currentAudio', 'listAudio'])
+    ...mapState('play', ['currentAudio', 'listAudio', 'likeList']),
+    isLike() {
+      return this.currentAudio.id && this.likeList.findIndex(i => i === this.currentAudio.id) > -1
+    }
   },
   methods: {
     ...mapMutations('artist', ['setCurrent']),
+    ...mapActions('play', ['toggleLike']),
     handleDetail() {
       this.$router.push({
         path: `/song-detail`
@@ -47,6 +54,9 @@ export default {
       this.$router.push({
         path: `/main/artist-detail/${this.currentAudio.ar[0].id}`
       })
+    },
+    handleLike() {
+      this.toggleLike()
     }
   },
 }

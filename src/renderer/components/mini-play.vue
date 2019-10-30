@@ -14,9 +14,13 @@
         </div>
       </div>
       <div class="flex-left flex align-center between" style="padding: 0 5px">
-        <i class="el-icon-star-on pointer no-drag" style="font-size:24px;"></i>
-        <i class="el-icon-minus pointer no-drag" style="font-size:24px;" @click="min"></i>
-        <i class="el-icon-rank pointer no-drag" style="font-size:24px;" @click="max"></i>
+        <span style="font-size:20px" :class="{'color-p': currentAudio.like}" class="pointer no-drag" @click="handleLike">
+          <icon-svg name="like"></icon-svg>
+        </span>
+        <i class="no-drag pointer" style="font-size:20px" :title="modeObj[playMode].title" @click="toggleMode">
+          <icon-svg :name="modeObj[playMode].name" />
+        </i>
+        <i class="el-icon-rank pointer no-drag" style="font-size:20px;" @click="max" title="完整模式"></i>
       </div>
     </div>
     <div class="lyric text-dot">{{lyric}}</div>
@@ -32,21 +36,34 @@ export default {
     this.$electron.ipcRenderer.on('mainId', (e, a) => {
       this.setMainId(a)
     })
+    this.$electron.ipcRenderer.on('miniId', (e, a) => {
+      this.setMiniId(a)
+    })
     this.$electron.ipcRenderer.on('audio', (e, a) => {
       this.setCurrentAudio(JSON.parse(a))
     })
     this.$electron.ipcRenderer.on('lyric', (e, a) => {
       this.lyric = a
     })
+
+    this.$electron.ipcRenderer.on('playMode', (e, a) => {
+      this.playMode = a
+    })
     
+    this.modeObj = {
+      1: {name: 'play-order', title: '顺序播放'},
+      2: {name: 'play-list', title: '列表循环'},
+      3: {name: 'play-single', title: '单曲循环'},
+      4: {name: 'play-random', title: '随机播放'},
+    }
   },
   computed: {
     ...mapState('play', ['currentAudio']),
-    ...mapState('mini', ['mainId']),
+    ...mapState('mini', ['mainId', 'miniId']),
   },
   methods: {
     ...mapMutations('play', ['setCurrentAudio']),
-    ...mapMutations('mini', ['setMainId']),
+    ...mapMutations('mini', ['setMainId', 'setMiniId']),
     next() {
       this.mainId && this.$electron.remote.BrowserWindow.fromId(this.mainId).webContents.send('nextFromMini')
     },
@@ -58,17 +75,21 @@ export default {
       this.audioPlaying = !this.audioPlaying
     },
     max() {
-      this.$electron.remote.BrowserWindow.fromId(1).show()
-      this.$electron.remote.BrowserWindow.fromId(2).hide()
+      this.$electron.remote.BrowserWindow.fromId(this.mainId).show()
+      this.$electron.remote.BrowserWindow.fromId(this.miniId).hide()
     },
-    min() {
-      this.$electron.remote.BrowserWindow.fromId(2).hide()
+    toggleMode() {
+      this.mainId && this.$electron.remote.BrowserWindow.fromId(this.mainId).webContents.send('toggleModeFromMini')
+    },
+    handleLike() {
+      this.mainId && this.$electron.remote.BrowserWindow.fromId(this.mainId).webContents.send('likeFromMini')
     }
   },
   data() {
     return {
       lyric: '',
       audioPlaying: true,
+      playMode: 1
     }
   }
 }

@@ -1,8 +1,9 @@
 
-import { getSongUrl } from '@/common/api'
+import { getSongUrl, likeSong } from '@/common/api'
 import { Message } from 'element-ui'
 
 const state = {
+  likeList: [],
   playMode: 1, //1->顺序 2->列表循环 3->单曲循环 4->随机
   lyricLines: [],
   currentLine: 0,
@@ -21,6 +22,9 @@ const state = {
 }
 
 const mutations = {
+  setLikeList(s, a) {
+    s.likeList = a
+  },
   setPlayMode(s, n) {
     s.playMode = n
   },
@@ -56,6 +60,11 @@ const actions = {
     if(!state.listAudio.length) {
       return
     }
+
+    if (state.likeList.findIndex(i => i === state.listAudio[state.indexAudio].id) > -1) {
+      state.listAudio[state.indexAudio].like = true
+    }
+
     if (state.listAudio[state.indexAudio].url) {
       commit('setCurrentAudio', state.listAudio[state.indexAudio])
       commit('setAudioPlaying', true)
@@ -122,9 +131,22 @@ const actions = {
     commit('setIndexAudio', inx)
     dispatch('playAudio')
   },
-  getLines() {
-    
-  }
+  toggleLike({commit, state}) {
+    let id = state.currentAudio.id
+    let isLike = state.likeList.findIndex(i => i === id) > -1
+    let data = {
+      id,
+      like: !isLike
+    }
+    likeSong(data).then(r => {
+      commit('setCurrentAudio', {...state.currentAudio, like: !isLike})
+      if (!isLike) {
+        commit('setLikeList', state.likeList.filter(i => i !== id))
+        return
+      }
+      commit('setLikeList', [...state.likeList, id])
+    })
+  },
 }
 
 export default {

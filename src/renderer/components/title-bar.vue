@@ -1,5 +1,5 @@
 <template>
-  <div class="title-bar drag">
+  <div class="title-bar drag flex align-center">
     <div class="no-drag" @click="$router.push('/main/find')">某云音乐</div>
     <el-button-group>
       <el-button class="no-drag" type="primary" icon="el-icon-edit" @click="handleBack"></el-button>
@@ -39,10 +39,13 @@
       <el-avatar class="no-drag" :src="user.avatar" @click="showLogin"></el-avatar>
       <span class="no-drag" @click="showLogin">{{user.nickname}}</span>
     </template>
-    <el-button-group>
-      <el-button class="no-drag" type="primary" @click="handleMini">mini</el-button>
-      <el-button class="no-drag" type="primary" @click="handleMin">min</el-button>
-    </el-button-group>
+    <div class="flex-left"></div>
+    <span style="font-size:20px;margin-right:10px" class="no-drag pointer" @click="handleMiniMode" title="mini模式">
+      <icon-svg name="mini-player" />
+    </span>
+    <span style="font-size:16px;margin-right:10px" class="no-drag pointer" @click="handleClose" title="关闭">
+      <icon-svg name="close" />
+    </span>
   </div>
 </template>
 
@@ -88,22 +91,18 @@ export default {
       }
       this.$router.go(-1)
     },
-    handleMini() {
-      // if (this.miniId) {
-      //   return
-      // }
-      this.$electron.ipcRenderer.send('mini')
+    handleMiniMode() {
+      this.miniId && this.$electron.remote.BrowserWindow.fromId(this.miniId).show()
+      this.mainId && this.$electron.remote.BrowserWindow.fromId(this.mainId).hide()
     },
-    handleMin() {
-      // this.$electron.ipcRenderer.send('min')
-      this.$electron.remote.BrowserWindow.fromId(2).show()
-      this.$electron.remote.BrowserWindow.fromId(1).hide()
-    },
+    handleClose() {
+      this.mainId && this.$electron.remote.BrowserWindow.fromId(this.mainId).hide()
+    }
   },
   computed: {
     ...mapState('play', ['currentAudio']),
     ...mapState('auth', ['user']),
-    ...mapState('mini', ['miniId']),
+    ...mapState('mini', ['miniId', 'mainId']),
     canBack() {
       return history.length > 1
     }
@@ -124,8 +123,6 @@ export default {
     background: #222225;
     border-bottom: 2px solid #931616;
     color: #fff;
-    display: flex;
-    align-items: center;
   }
 
   .search-item{

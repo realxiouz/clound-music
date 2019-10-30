@@ -10,6 +10,9 @@ export default {
     this.$electron.ipcRenderer.on('miniId', (e, a) => {
       this.setMiniId(a)
     })
+    this.$electron.ipcRenderer.on('mainId', (e, a) => {
+      this.setMainId(a)
+    })
     this.$electron.ipcRenderer.on('miniClose', (e, a) => {
       this.setMiniId(0)
     })
@@ -28,14 +31,24 @@ export default {
         this.setAudioPlaying(true)
       }
     })
+
+    this.$electron.ipcRenderer.on('toggleModeFromMini', (e, a) => {
+      let mode = this.playMode + 1 === 5 ? 1 : this.playMode + 1
+      this.setPlayMode(mode)
+      this.$local.set('playMode', mode)
+    })
+
+    this.$electron.ipcRenderer.on('likeFromMini', (e, a) => {
+      this.toggleLike()
+    })
   },
   methods: {
-    ...mapMutations('play', ['setAudioPlaying']),
-    ...mapMutations('mini', ['setMiniId']),
-    ...mapActions('play', ['playNextAudio','playPreAudio']),
+    ...mapMutations('play', ['setAudioPlaying', 'setPlayMode']),
+    ...mapMutations('mini', ['setMiniId', 'setMainId']),
+    ...mapActions('play', ['playNextAudio','playPreAudio', 'toggleLike']),
   },
   computed: {
-    ...mapState('play', ['currentAudio', 'audioPlaying']),
+    ...mapState('play', ['currentAudio', 'audioPlaying', 'playMode']),
     ...mapState('mini', ['miniId']),
   },
   watch: {
@@ -45,6 +58,12 @@ export default {
       },
       immediate: true
     },
+    'playMode': {
+      handler(val) {
+        val && this.miniId && this.$electron.remote.BrowserWindow.fromId(this.miniId).webContents.send('playMode', val)
+      },
+      immediate: true
+    }
   }
 }
 </script>

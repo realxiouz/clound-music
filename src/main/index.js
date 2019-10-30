@@ -33,6 +33,7 @@ function createWindow () {
 
   mainWindow.once('ready-to-show', () => {
     mainWindow.show()
+    createMini()
   })
 
   mainWindow.on('closed', () => {
@@ -86,7 +87,7 @@ function createMini () {
 
 app.on('ready', _ => {
   createWindow()
-  createMini()
+  // createMini()
 })
 
 
@@ -106,7 +107,9 @@ let mini
 
 ipcMain.on('mini-done', _ => {
   mini.webContents.send('mainId', mainWindow.id)
+  mini.webContents.send('miniId', mini.id)
   mainWindow.webContents.send('miniId', mini.id)
+  mainWindow.webContents.send('mainId', mainWindow.id)
 })
 
 ipcMain.on('min', _ => {

@@ -17,7 +17,10 @@
         @change="handleSeek"/>
       <span>{{currentAudio.dt|songLength}}</span>
     </div>
-    <div class="flex align-center" style="width:200px">
+    <div class="flex align-center" style="width:150px;margin-left:20px">
+      <span style="font-size:16px">
+        <icon-svg :name="volume===0?'volume-mute':'volume-up'" />
+      </span>
       <el-slider
         v-model="volume"
         class="flex-left"
