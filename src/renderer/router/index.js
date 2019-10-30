@@ -10,6 +10,7 @@ import ArtistDetail from '@/pages/artist-detail'
 import AlbumDetail from '@/pages/album-detail'
 import Connection from '@/pages/connection'
 import MvDetail from '@/pages/mv-detail'
+import Search from '@/pages/search'
 
 import Mini from '@/components/mini-play'
 
@@ -50,6 +51,10 @@ export default new Router({
         {
           path: 'connection',
           component: Connection
+        },
+        {
+          path: 'search/:kw?',
+          component: Search
         }
       ]
     },

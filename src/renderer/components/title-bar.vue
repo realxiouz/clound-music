@@ -2,13 +2,14 @@
   <div class="title-bar">
     <div class="no-drag" @click="$router.push('/main/find')">某云音乐</div>
     <el-button-group>
-      <el-button :disabled="!canBack" class="no-drag" type="primary" icon="el-icon-edit" @click="handleBack"></el-button>
+      <el-button class="no-drag" type="primary" icon="el-icon-edit" @click="handleBack"></el-button>
       <el-button class="no-drag" type="primary" icon="el-icon-share"></el-button>
     </el-button-group>
     <el-autocomplete
+      style="width:355px;"
       class="no-drag"
       popper-class="my-autocomplete"
-      v-model="state"
+      v-model="kw"
       :fetch-suggestions="querySearch"
       placeholder="请输入内容"
       @select="handleSelect">
@@ -18,8 +19,15 @@
         @click="handleSearch">
       </i>
       <template slot-scope="{ item }">
-        <div class="name">{{ item.value }}</div>
-        <span class="addr">{{ item.address }}</span>
+        <div class="search-item">
+          <div class="word flex align-center">
+            <div>{{ item.searchWord }}</div>
+            <div class="count">{{item.score}}</div>
+            <img style="width:auto;height:13px" v-if="item.iconUrl" :src="item.iconUrl" />
+            <!-- <el-image style="width:auto;height:13px" v-if="item.iconUrl" :src="item.iconUrl"></el-image> -->
+          </div>
+          <span class="content">{{ item.content }}</span>
+        </div>
       </template>
     </el-autocomplete>
 
@@ -39,19 +47,34 @@
 </template>
 
 <script>
-import { loginByPhone } from '@/common/api'
+import { loginByPhone, searchSuggest } from '@/common/api'
 import { mapMutations, mapState } from 'vuex'
 
 export default {
   data() {
     return {
-      state: '',
+      kw: '',
+      suggest: [],
     }
   },
   methods: {
     ...mapMutations('auth', ['setUser', 'setShowLoginForm']),
-    querySearch() {},
-    handleSelect() {},
+    querySearch(str, cb) {
+      if(!str){
+        this.suggest.length ? cb(this.suggest) :
+        searchSuggest().then(r => {
+          cb(r.data)
+          this.suggest = r.data
+        })
+      }
+      
+    },
+    handleSelect(i) {
+      this.kw = i.searchWord
+      this.kw && this.$router.push({
+        path: `/main/search/${this.kw}`
+      })
+    },
     handleSearch() {
 
     },
@@ -99,6 +122,19 @@ export default {
     color: #fff;
     display: flex;
     align-items: center;
-    // -webkit-app-region: drag;
+  }
+
+  .search-item{
+    .word{
+      font-size: 12px;
+      .count{
+        font-size: 10px;
+        margin: 0 10px;
+      }
+    }
+    .content{
+      font-size: 10px;
+      line-height: 1;
+    }
   }
 </style>

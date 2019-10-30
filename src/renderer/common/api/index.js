@@ -60,3 +60,7 @@ export const getMvUrl = params => http.get('/mv/url', {params}) // {id: }
 
 // 收藏的歌单
 export const getMySheet = params => http.get('/user/playlist', {params}) // {uid}
+
+// search
+export const searchSuggest = _ => http.get('/search/hot/detail')
+export const searchKeyword = params => http.get('/search', {params}) // {keywords, type}
