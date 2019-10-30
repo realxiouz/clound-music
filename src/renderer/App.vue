@@ -55,9 +55,13 @@
     },
     methods: {
       ...mapMutations('auth', ['setUser', 'setShowLoginForm']),
+      ...mapMutations('play', ['setPlayMode']),
       _initApp() {
         let user = this.$local.get('user')
         user && this.setUser(user)
+
+        let mode = this.$local.get('playMode') || 1
+        this.setPlayMode(mode)
       },
       handleLogin() {
         loginByPhone(this.form).then(r => {

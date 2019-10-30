@@ -1,9 +1,9 @@
 <template>
-  <div style="background-color: #292C33">
+  <div style="background-color: #292C33" class="drag">
     <div class="flex main align-center">
-      <el-image :src="currentAudio.al.picUrl" class="img-alb drag"></el-image>
-      <div class="toggle" style="width:160px;height:100%;">
-        <div class="action flex align-center between" style="width:100%;height:100%">
+      <el-image :src="currentAudio.al.picUrl" class="img-alb"></el-image>
+      <div class="toggle no-drag" style="width:160px;height:100%;">
+        <div class="action flex align-center between no-drag" style="width:100%;height:100%">
           <i @click="pre" class="el-icon-caret-left pointer" style="font-size:24px;"></i>
           <i @click="togglePlay" :class="audioPlaying?'el-icon-video-pause':'el-icon-video-play'" class="pointer" style="font-size:36px"></i>
           <i @click="next" class="el-icon-caret-right pointer" style="font-size:24px"></i>
@@ -14,12 +14,12 @@
         </div>
       </div>
       <div class="flex-left flex align-center between" style="padding: 0 5px">
-        <i class="el-icon-star-on pointer" style="font-size:24px;"></i>
-        <i class="el-icon-minus pointer" style="font-size:24px;" @click="min"></i>
-        <i class="el-icon-rank pointer" style="font-size:24px;" @click="max"></i>
+        <i class="el-icon-star-on pointer no-drag" style="font-size:24px;"></i>
+        <i class="el-icon-minus pointer no-drag" style="font-size:24px;" @click="min"></i>
+        <i class="el-icon-rank pointer no-drag" style="font-size:24px;" @click="max"></i>
       </div>
     </div>
-    <div class="lyric text-dot drag">{{lyric}}</div>
+    <div class="lyric text-dot">{{lyric}}</div>
   </div>
 </template>
 

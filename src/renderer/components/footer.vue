@@ -1,7 +1,7 @@
 <template>
   <div class="footer flex align-center">
     <div class="control flex between align-center">
-      <i @click="handlePre" class="el-icon-caret-left pointer" style="font-size:24px;"></i>
+      <i @click="handlePre" class="el-icon-caret-left pointer" style="font-size:24px;" title="上一首"></i>
       <i @click="handlePlay" :class="audioPlaying?'el-icon-video-pause':'el-icon-video-play'" class="pointer" style="font-size:36px"></i>
       <i @click="handleNext" class="el-icon-caret-right pointer" style="font-size:24px"></i>
     </div>
@@ -29,7 +29,7 @@
     <div class="pointer" @click="toggleMode">
       <el-tag effect="dark">{{modeObj[this.playMode]}}</el-tag>
     </div>
-    <div v-if="listAudio.length" @click="showSongSheet=!showSongSheet">
+    <div v-if="listAudio.length" @click="showSongSheet=!showSongSheet" title="双击切歌">
       歌单-{{listAudio.length}}
     </div>
 
@@ -87,7 +87,9 @@ export default {
       this.$local.set('volume', val)
     },
     toggleMode() {
-      this.setPlayMode(this.playMode + 1 === 5 ? 1 : this.playMode + 1)
+      let mode = this.playMode + 1 === 5 ? 1 : this.playMode + 1
+      this.setPlayMode(mode)
+      this.$local.set('playMode', mode)
     }
   },
   watch: {

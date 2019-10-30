@@ -1,5 +1,5 @@
 <template>
-  <div class="title-bar">
+  <div class="title-bar drag">
     <div class="no-drag" @click="$router.push('/main/find')">某云音乐</div>
     <el-button-group>
       <el-button class="no-drag" type="primary" icon="el-icon-edit" @click="handleBack"></el-button>
@@ -82,6 +82,10 @@ export default {
       this.setShowLoginForm(true)
     },
     handleBack() {
+      if (history.length === 1) {
+        this.$message('不能后退了')
+        return
+      }
       this.$router.go(-1)
     },
     handleMini() {
