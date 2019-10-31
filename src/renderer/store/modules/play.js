@@ -19,9 +19,14 @@ const state = {
   playTime: 0, //单位 ms
   audioPlaying: false,
   videoPlaying: false,
+  
+  mySheets: [],
 }
 
 const mutations = {
+  setMySheets(s, a) {
+    s.mySheets = a
+  },
   setLikeList(s, a) {
     s.likeList = a
   },

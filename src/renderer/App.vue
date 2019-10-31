@@ -55,7 +55,7 @@
     },
     methods: {
       ...mapMutations('auth', ['setUser', 'setShowLoginForm']),
-      ...mapMutations('play', ['setPlayMode', 'setLikeList']),
+      ...mapMutations('play', ['setPlayMode', 'setLikeList', 'setMySheets']),
       _initApp() {
         let user = this.$local.get('user')
         user && this.setUser(user)
@@ -81,6 +81,7 @@
             likeSongList({uid: r.account.id})
           ]) 
         }).then(r => {
+          this.setMySheets(r[0].playlist)
           this.setLikeList(r[1].ids)
         })
       },

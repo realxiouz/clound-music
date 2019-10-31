@@ -29,6 +29,7 @@
 
 <script>
 import {mapState, mapMutations} from 'vuex'
+import { PLAY_MODE } from '@/common/data/const'
 export default {
   created() {
     this.$electron.ipcRenderer.send('mini-done')
@@ -50,12 +51,7 @@ export default {
       this.playMode = a
     })
     
-    this.modeObj = {
-      1: {name: 'play-order', title: '顺序播放'},
-      2: {name: 'play-list', title: '列表循环'},
-      3: {name: 'play-single', title: '单曲循环'},
-      4: {name: 'play-random', title: '随机播放'},
-    }
+    this.modeObj = PLAY_MODE
   },
   computed: {
     ...mapState('play', ['currentAudio']),

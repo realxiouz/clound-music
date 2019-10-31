@@ -79,7 +79,10 @@
           this.scroll && this.scroll.scrollToElement(`#lyric${val}`, 300, null, true)
         }
       }
-    }
+    },
+    beforeDestroy() {
+      this.scroll && this.scroll.destroy()
+    },
   }
 </script>
 

@@ -1,5 +1,12 @@
 <template>
-  <div>
+  <div
+    v-loading="loading"
+    class="fill-parent"
+    style="box-sizing:border-box"
+    element-loading-text="加载中..."
+    element-loading-spinner="el-icon-loading"
+    element-loading-background="rgba(0, 0, 0, 0.8)"
+  >
     <div class="flex" style="padding:30px">
       <el-image style="width:200px;height:200px;margin-right:30px" :src="playList.coverImgUrl"></el-image>
       <div class="flex-left">
@@ -70,9 +77,6 @@
   import { mapActions, mapMutations, mapState } from 'vuex'
 
   export default {
-    // created() {
-    //   this._getData()
-    // },
     data() {
       return {
         playList: {
@@ -80,13 +84,9 @@
           tracks: [],
           creator: {},
           tags: []
-        }
+        },
+        loading: false
       }
-    },
-    beforeRouteEnter (to, from, next) {
-      next(vm => {
-        vm._getData()
-      })
     },
     methods: {
       ...mapActions('play', ['playAudio', 'playSongSheet']),
@@ -95,8 +95,11 @@
         let data = {
           id: this.$route.query.id
         }
+        this.loading = true
         getSongSheetDetail(data).then(r => {
           this.playList = r.playlist
+        }).finally(_ => {
+          this.loading = false
         })
       },
       indexMethod(inx) {
@@ -113,6 +116,14 @@
     },
     components: {
       Tag
+    },
+    watch: {
+      '$route.query.id': {
+        handler(val) {
+          val && this._getData()
+        },
+        immediate: true
+      }
     }
   }
 </script>

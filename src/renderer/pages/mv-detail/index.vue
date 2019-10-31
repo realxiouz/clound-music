@@ -7,7 +7,7 @@
         <span>{{mv.artistName}}</span>
       </div>
       <div class="video-wrap">
-        <video style="width:690px;height:394px;background:#000;" :src="mv.url" controls></video>
+        <video style="width:690px;height:394px;background:#000;" :src="mv.url" controls autoplay></video>
       </div>
       <div>
 
@@ -29,10 +29,15 @@
 
 <script>
 import {getMvDetail, getMvUrl} from '@/common/api'
+import { mapState, mapMutations} from 'vuex'
 
 export default {
   created() {
     this._getData()
+    if (this.audioPlaying) {
+      this.$root.$audio && this.$root.$audio.pause()
+      this.setAudioPlaying(false)
+    }
   },
   data() {
     return {
@@ -40,6 +45,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations('play', ['setAudioPlaying']),
     _getData() {
       let id = this.$route.params.id
       Promise.all([
@@ -50,6 +56,9 @@ export default {
         this.mv.url = arr[1].data.url
       })
     }
+  },
+  computed: {
+    ...mapState('play', ['audioPlaying'])
   },
 }
 </script>

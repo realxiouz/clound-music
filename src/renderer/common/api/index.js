@@ -1,4 +1,5 @@
 import { Message } from 'element-ui'
+import store from '@/store'
 
 import axios from 'axios'
 const http = axios.create({
@@ -12,6 +13,10 @@ http.interceptors.response.use(res => {
     case 200:
       if (data.code === 200) {
         return data
+      }
+      if (data.code === 301) {
+        store.commit('auth/setShowLoginForm', true)
+        return Promise.reject('need login')
       }
       Message({message: data.msg, type: 'warning'})
       return Promise.reject('code err')
@@ -68,3 +73,9 @@ export const searchKeyword = params => http.get('/search', {params}) // {keyword
 // like
 export const likeSong = params => http.get('/like', {params}) // {id, like}
 export const likeSongList = params => http.get('/likelist', {params}) // {uid}
+
+// 推荐新音乐
+export const newMusic = _ => http.get('/personalized/newsong')
+export const privateContent = _ => http.get('/personalized/privatecontent')
+export const privateDj = _ => http.get('/personalized/djprogram')
+export const privateMv = _ => http.get('/personalized/mv')

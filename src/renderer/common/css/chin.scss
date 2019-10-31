@@ -68,3 +68,20 @@
 .color-p{
   color: #B82525;
 }
+
+.cf{
+  &::after{
+    clear: both;
+    content: ' ';
+    display: block;
+    height: 0;
+    visibility: hidden;
+  }
+}
+
+.line2{
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="song-item">
     <div style="width: 140px; height: 140px" class="pos-r text-center" @click="handleSheetDetail">
       <template v-if="date">
         <div style="height:100%;background:#fff">
@@ -16,7 +16,7 @@
         <i class="el-icon-video-play pos-a" style="right:5px;bottom:5px"/>
       </template>
     </div>
-    <div style="width:140px">
+    <div class="line2" style="margin:8px 0 3px">
       {{date?'每日歌曲推荐':bean.name}}
     </div>
   </div>
@@ -58,5 +58,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  
+  .song-item{
+    width: 140px;
+    padding: 0 0 16px 16px;
+    // float: left;
+  }
 </style>

@@ -2,7 +2,7 @@
   <div>
     <div class="d-mask" :class="{show: value}" @click="$emit('input', false)"></div>
     <div class="d-wrap" :class="{show: value}" >
-      <div class="scroll-wrap" style="height:100%;over-flow:hidden">
+      <div ref="songs" style="height:100%;over-flow:hidden">
         <div>
           <div
             @dblclick="playSel(inx)"
@@ -53,7 +53,7 @@ export default {
     'listAudio': {
       handler(v) {
         this.$nextTick(_ => {
-          this.scroll = new BScroll('.scroll-wrap')
+          this.scroll = new BScroll(this.$refs.songs)
         })
       }
     },

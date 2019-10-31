@@ -7,16 +7,30 @@
           {{item.text}}
         </div>
       </div>
+
+      <div v-if="mySheets.length">
+        <div class="f-title flex between pointer" @click="showSheets=!showSheets">
+          <span>收藏的歌单</span>
+          <i :class="showSheets?'el-icon-arrow-down':'el-icon-arrow-right'"/>
+        </div>
+        <div v-if="showSheets">
+          <div
+            class="s-title text-dot"
+            :class="$route.query.id == item.id ? 'active':''"
+            v-for="(item, inx) in mySheets"
+            :key="inx"
+            @click="$router.push({path: `/main/sheet?id=${item.id}`})"
+          >
+            <icon-svg name="sheet" style="font-size:14px" />&nbsp;{{item.name}}
+          </div>
+        </div>
+      </div>
     </div>
     <div class="mini-player flex align-center" v-if="listAudio.length" >
       <el-image :src="currentAudio.al.picUrl" style="width:45px;height:45px;margin-right:4px"></el-image>
       <div class="flex-left flex direction between" style="height:36px">
-        <div>
           <span class="song text-dot" @click="handleDetail">{{currentAudio.name}}</span>
-        </div>
-        <div>
           <span class="artist text-dot" @click="handleArtist">{{currentAudio.ar[0].name}}</span>
-        </div>
       </div>
       <span style="font-size:20px" :class="{'color-p': currentAudio.like}" class="pointer" @click="handleLike">
         <icon-svg name="like"></icon-svg>
@@ -32,11 +46,12 @@ import { mapState, mapMutations, mapActions } from 'vuex'
 export default {
   data() {
     return {
-      menu
+      menu,
+      showSheets: true
     }
   },
   computed: {
-    ...mapState('play', ['currentAudio', 'listAudio', 'likeList']),
+    ...mapState('play', ['currentAudio', 'listAudio', 'likeList', 'mySheets']),
     isLike() {
       return this.currentAudio.id && this.likeList.findIndex(i => i === this.currentAudio.id) > -1
     }

@@ -29,13 +29,17 @@
         :max="100"
         @change="handleVolumeChange"/>
     </div>
-    <div class="pointer" @click="toggleMode">
-      <el-tag effect="dark">{{modeObj[this.playMode]}}</el-tag>
-    </div>
-    <div v-if="listAudio.length" @click="showSongSheet=!showSongSheet" title="双击切歌">
-      歌单-{{listAudio.length}}
-    </div>
+    <i class="pointer" style="font-size:20px;margin-right:20px" :title="modeObj[playMode].title" @click="toggleMode">
+      <icon-svg :name="modeObj[playMode].name" />
+    </i>
 
+    <div class="flex align-center pointer" v-if="listAudio.length" @click="showSongSheet=!showSongSheet" title="双击切歌">
+      <i style="font-size:20px">
+        <icon-svg name="sheet" />
+      </i>
+      <span>&nbsp;<span class="color-p">{{indexAudio+1}}</span>/{{listAudio.length}}</span>
+    </div>
+    
     <dialog-sheet v-model="showSongSheet" />
   </div>
 </template>
@@ -43,15 +47,11 @@
 <script>
 import { mapMutations, mapState, mapActions } from 'vuex'
 import DialogSheet from './dialog-song-sheet'
+import { PLAY_MODE } from '@/common/data/const'
 
 export default {
   created() {
-    this.modeObj = {
-      1: '顺序播放',
-      2: '列表循环',
-      3: '单曲循环',
-      4: '随机播放',
-    }
+    this.modeObj = PLAY_MODE
   },
   data() {
     return {
@@ -61,7 +61,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('play', ['currentAudio', 'playTime', 'audioPlaying', 'listAudio', 'playMode']),
+    ...mapState('play', ['currentAudio', 'playTime', 'audioPlaying', 'listAudio', 'playMode', 'indexAudio']),
   },
   methods: {
     ...mapMutations('play', ['setAudioPlaying', 'setPlayMode']),

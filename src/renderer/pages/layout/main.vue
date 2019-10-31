@@ -2,9 +2,11 @@
   <div class="main-layout">
     <div class="main">
       <left-side />
-      <keep-alive>
-        <router-view style="flex:1;overflow-y:auto" />
-      </keep-alive>
+      <div style="flex:1;overflow-y:auto">
+        <keep-alive>
+          <router-view style="width:765px;margin:0 auto;" />
+        </keep-alive>
+      </div>
     </div>
     <footer-bar />
   </div>

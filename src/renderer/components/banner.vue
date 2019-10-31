@@ -1,8 +1,8 @@
 <template>
   <div>
-    <el-carousel :interval="4000" type="card" height="200px" v-loading="loading">
+    <el-carousel :interval="0" type="card" height="200px" v-loading="loading" arrow="never" :autoplay="false">
       <el-carousel-item v-for="(i, inx) in imgs" :key="inx">
-        <img :src="i.imageUrl" style="width:540px;height:200px"/>
+        <img :src="i.imageUrl" class="fill-parent"/>
       </el-carousel-item>
     </el-carousel>
   </div>
