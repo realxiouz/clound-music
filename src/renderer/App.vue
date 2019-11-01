@@ -97,6 +97,7 @@ body{
   font-size: 12px;
   font-family: Arial, Helvetica, sans-serif;
   background-color: $dark1;
+  // user-select: none;
 }
 .app{
   display: flex;

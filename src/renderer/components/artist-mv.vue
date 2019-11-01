@@ -1,10 +1,10 @@
 <template>
-  <div class="flex wrap">
-    <div v-for="(i, inx) in mvs" :key="inx" style="width:160px" @click="handleMv(i)">
+  <div class="flex wrap" style="margin-left:-41px">
+    <div v-for="(i, inx) in mvs" :key="inx" style="width:160px;padding: 0 0 41px 41px" @click="handleMv(i)">
       <div>
         <el-image :src="i.imgurl" style="width:160px;height:90px"></el-image>
       </div>
-      <div>{{i.name}}</div>
+      <div style="margin-top:6px" class="text-dot">{{i.name}}</div>
     </div>
   </div>
 </template>
@@ -39,6 +39,13 @@ export default {
       this.$router.push({
         path: `/mv-detail/${i.id}`
       })
+    }
+  },
+  watch: {
+    'aId': {
+      handler(val) {
+        this._getData()
+      }
     }
   },
 }

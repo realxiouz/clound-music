@@ -20,16 +20,16 @@
     </div>
     <el-tabs>
       <el-tab-pane label="专辑" lazy>
-        <album class="px-30" :a-id="current.id"/>
+        <album :a-id="current.id"/>
       </el-tab-pane>
       <el-tab-pane label="MV" lazy>
-        <mv class="px-30" :a-id="current.id"/>
+        <mv :a-id="current.id"/>
       </el-tab-pane>
       <el-tab-pane label="歌手详情" lazy>
-        <a-desc class="px-30" :a-id="current.id"/>
+        <a-desc :a-id="current.id"/>
       </el-tab-pane>
       <el-tab-pane label="相似歌手" lazy>
-        <similar class="px-30" :a-id="current.id"/>
+        <similar :a-id="current.id"/>
       </el-tab-pane>
     </el-tabs>
   </div>

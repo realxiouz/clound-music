@@ -72,7 +72,6 @@ const actions = {
 
     if (state.listAudio[state.indexAudio].url) {
       commit('setCurrentAudio', state.listAudio[state.indexAudio])
-      commit('setAudioPlaying', true)
     } else {
       let {id} = state.listAudio[state.indexAudio]
       getSongUrl({id}).then(r => {
@@ -80,7 +79,6 @@ const actions = {
           let url = r.data[0].url
           if (url) {
             commit('setCurrentAudio', {...state.listAudio[state.indexAudio], url})
-            commit('setAudioPlaying', true)
             state.listAudio[state.indexAudio].url = url
           } else {
             console.log(`获取url失败,id: ${id}`)
@@ -114,7 +112,6 @@ const actions = {
       let notification = new Notification('标题', {
         body: '全部播放完毕'
       })
-      commit('setAudioPlaying', false)
       return
     }
     commit('setIndexAudio', inx)

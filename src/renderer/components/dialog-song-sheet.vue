@@ -61,6 +61,11 @@ export default {
       handler(val) {
         this.scroll && this.scroll.scrollToElement(`#song${val}`, 300, null, true)
       }
+    },
+    'value': {
+      handler(val) {
+        val && (this.scroll = new BScroll(this.$refs.songs))
+      }
     }
   }
 }

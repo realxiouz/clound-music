@@ -4,9 +4,9 @@
       <el-image :src="currentAudio.al.picUrl" class="img-alb"></el-image>
       <div class="toggle no-drag" style="width:160px;height:100%;">
         <div class="action flex align-center between no-drag" style="width:100%;height:100%">
-          <i @click="pre" class="el-icon-caret-left pointer" style="font-size:24px;"></i>
-          <i @click="togglePlay" :class="audioPlaying?'el-icon-video-pause':'el-icon-video-play'" class="pointer" style="font-size:36px"></i>
-          <i @click="next" class="el-icon-caret-right pointer" style="font-size:24px"></i>
+          <i title="上一首" @click="pre" class="el-icon-caret-left pointer" style="font-size:24px;"></i>
+          <i :title="audioPlaying?'暂停':'播放'" @click="togglePlay" :class="audioPlaying?'el-icon-video-pause':'el-icon-video-play'" class="pointer" style="font-size:36px"></i>
+          <i title="下一首" @click="next" class="el-icon-caret-right pointer" style="font-size:24px"></i>
         </div>
         <div class="info flex direction between">
           <div class="song text-dot">{{currentAudio.name}}</div>
@@ -40,6 +40,14 @@ export default {
     this.$electron.ipcRenderer.on('miniId', (e, a) => {
       this.setMiniId(a)
     })
+
+    this.$electron.ipcRenderer.on('initMini', (e, a) => {
+      let {currentAudio, audioPlaying, playMode} = JSON.parse(a)
+      this.setCurrentAudio(currentAudio)
+      this.setAudioPlaying(audioPlaying)
+      this.setPlayMode(playMode)
+    })
+
     this.$electron.ipcRenderer.on('audio', (e, a) => {
       this.setCurrentAudio(JSON.parse(a))
     })
@@ -48,17 +56,21 @@ export default {
     })
 
     this.$electron.ipcRenderer.on('playMode', (e, a) => {
-      this.playMode = a
+      this.setPlayMode(a)
+    })
+
+    this.$electron.ipcRenderer.on('audioPlaying', (e, a) => {
+      this.setAudioPlaying(a)
     })
     
     this.modeObj = PLAY_MODE
   },
   computed: {
-    ...mapState('play', ['currentAudio']),
+    ...mapState('play', ['currentAudio', 'audioPlaying', 'playMode']),
     ...mapState('mini', ['mainId', 'miniId']),
   },
   methods: {
-    ...mapMutations('play', ['setCurrentAudio']),
+    ...mapMutations('play', ['setCurrentAudio', 'setAudioPlaying', 'setPlayMode']),
     ...mapMutations('mini', ['setMainId', 'setMiniId']),
     next() {
       this.mainId && this.$electron.remote.BrowserWindow.fromId(this.mainId).webContents.send('nextFromMini')
@@ -68,11 +80,10 @@ export default {
     },
     togglePlay() {
       this.mainId && this.$electron.remote.BrowserWindow.fromId(this.mainId).webContents.send('toggleFromMini')
-      this.audioPlaying = !this.audioPlaying
     },
     max() {
-      this.$electron.remote.BrowserWindow.fromId(this.mainId).show()
-      this.$electron.remote.BrowserWindow.fromId(this.miniId).hide()
+      this.mainId && this.$electron.remote.BrowserWindow.fromId(this.mainId).show()
+      this.miniId && this.$electron.remote.BrowserWindow.fromId(this.miniId).hide()
     },
     toggleMode() {
       this.mainId && this.$electron.remote.BrowserWindow.fromId(this.mainId).webContents.send('toggleModeFromMini')
@@ -83,9 +94,7 @@ export default {
   },
   data() {
     return {
-      lyric: '',
-      audioPlaying: true,
-      playMode: 1
+      lyric: ''
     }
   }
 }

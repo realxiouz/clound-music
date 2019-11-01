@@ -64,12 +64,10 @@
       FooterBar
     },
     watch: {
-      'currentAudio.id': {
+      'lyricLines': {
         handler(val) {
-          this.scroll && this.scroll.destroy()
-          this.scroll = null
           this.$nextTick(_ => {
-            this.scroll = new BScroll('#wrap')
+            this.scroll ? this.scroll.refresh() : this.scroll = new BScroll('#wrap')
           })
         },
         immediate: true

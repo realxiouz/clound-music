@@ -36,7 +36,6 @@ export default {
     this._getData()
     if (this.audioPlaying) {
       this.$root.$audio && this.$root.$audio.pause()
-      this.setAudioPlaying(false)
     }
   },
   data() {
@@ -45,7 +44,6 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('play', ['setAudioPlaying']),
     _getData() {
       let id = this.$route.params.id
       Promise.all([

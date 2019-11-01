@@ -1,9 +1,25 @@
 <template>
   <div class="footer flex align-center">
     <div class="control flex between align-center">
-      <i @click="handlePre" class="el-icon-caret-left pointer" style="font-size:24px;" title="上一首"></i>
-      <i @click="handlePlay" :class="audioPlaying?'el-icon-video-pause':'el-icon-video-play'" class="pointer" style="font-size:36px"></i>
-      <i @click="handleNext" class="el-icon-caret-right pointer" style="font-size:24px"></i>
+      <i
+        @click="handlePre"
+        class="el-icon-caret-left pointer"
+        style="font-size:24px;" 
+        title="上一首"
+      />
+      <i
+        @click="handlePlay"
+        :class="audioPlaying?'el-icon-video-pause':'el-icon-video-play'"
+        class="pointer"
+        style="font-size:36px"
+        :title="audioPlaying?'暂停':'播放'"
+      />
+      <i
+        @click="handleNext"
+        class="el-icon-caret-right pointer"
+        style="font-size:24px"
+        title="上一首"
+      />
     </div>
     <div class="progress flex align-center" style="width:450px">
       <span>{{playTime|songLength}}</span>
@@ -64,21 +80,31 @@ export default {
     ...mapState('play', ['currentAudio', 'playTime', 'audioPlaying', 'listAudio', 'playMode', 'indexAudio']),
   },
   methods: {
-    ...mapMutations('play', ['setAudioPlaying', 'setPlayMode']),
+    ...mapMutations('play', ['setPlayMode']),
     ...mapActions('play', ['playNextAudio', 'playPreAudio']),
     handleNext() {
+      if (!this.currentAudio.url) {
+        this.$message('还未选择选择播放的歌单或者歌曲')
+        return
+      }
       this.playNextAudio()
     },
     handlePre() {
+      if (!this.currentAudio.url) {
+        this.$message('还未选择选择播放的歌单或者歌曲')
+        return
+      }
       this.playPreAudio()
     },
     handlePlay() {
+      if (!this.currentAudio.url) {
+        this.$message('还未选择选择播放的歌单或者歌曲')
+        return
+      }
       if (this.audioPlaying) {
         this.$root.$audio.pause()
-        this.setAudioPlaying(false)
       } else {
         this.$root.$audio.play()
-        this.setAudioPlaying(true)
       }
     },
     handleSeek(val) {

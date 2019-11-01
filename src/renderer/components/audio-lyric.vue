@@ -15,6 +15,17 @@ export default {
     this.$refs.audio.addEventListener('timeupdate', _ => {
       this.setPlayTime(this.$refs.audio.currentTime*1000)
     })
+
+    this.$refs.audio.addEventListener('play', _ => {
+      this.setAudioPlaying(true)
+      this.miniId && this.$electron.remote.BrowserWindow.fromId(this.miniId).webContents.send('audioPlaying', true)
+    })
+
+    this.$refs.audio.addEventListener('pause', _ => {
+      this.setAudioPlaying(false)
+      this.miniId && this.$electron.remote.BrowserWindow.fromId(this.miniId).webContents.send('audioPlaying', false)
+    })
+
     this.$refs.audio.volume = (this.$local.get('volume')||50)/100
     this.$root.$audio = this.$refs.audio
   },
@@ -42,7 +53,7 @@ export default {
         })
       },
       immediate: true
-    }
+    },
   },
   computed: {
     ...mapState('play', ['playTime', 'currentAudio', 'audioPlaying', 'playMode']),
@@ -55,7 +66,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('play', ['setCurrentLine', 'setLyricLines', 'setPlayTime', 'setLyricLines', 'setCurrentLine']),
+    ...mapMutations('play', ['setCurrentLine', 'setLyricLines', 'setPlayTime', 'setLyricLines', 'setAudioPlaying']),
     ...mapActions('play', ['playNextAudio']),
     _getLyric(id) {
       getSongLyric({id}).then(r => {

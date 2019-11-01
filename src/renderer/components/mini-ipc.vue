@@ -9,6 +9,13 @@ export default {
   created() {
     this.$electron.ipcRenderer.on('miniId', (e, a) => {
       this.setMiniId(a)
+      this.miniId && this.$electron.remote.BrowserWindow.fromId(this.miniId).send('initMini',
+        JSON.stringify({
+          currentAudio: this.currentAudio,
+          playMode: this.playMode,
+          audioPlaying: this.audioPlaying
+        })
+      )
     })
     this.$electron.ipcRenderer.on('mainId', (e, a) => {
       this.setMainId(a)
@@ -25,10 +32,8 @@ export default {
     this.$electron.ipcRenderer.on('toggleFromMini', (e, a) => {
       if (this.audioPlaying) {
         this.$root.$audio.pause()
-        this.setAudioPlaying(false)
       } else {
         this.$root.$audio.play()
-        this.setAudioPlaying(true)
       }
     })
 
@@ -43,7 +48,7 @@ export default {
     })
   },
   methods: {
-    ...mapMutations('play', ['setAudioPlaying', 'setPlayMode']),
+    ...mapMutations('play', ['setPlayMode']),
     ...mapMutations('mini', ['setMiniId', 'setMainId']),
     ...mapActions('play', ['playNextAudio','playPreAudio', 'toggleLike']),
   },

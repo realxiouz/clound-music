@@ -1,5 +1,4 @@
 const timeExp = /\[(\d{2,}):(\d{2})(?:[\.:](\d{2,3}))?]/g
-const timeExp2 = /\[(\d{2,}):(\d{2})(?:[\.:](\d{2,3}))?](?:\[(\d{2,}):(\d{2})(?:[\.:](\d{2,3}))?])?/g
 const STATE_PAUSE = 0
 const STATE_PLAYING = 1
 
@@ -41,14 +40,19 @@ export default class Lyric {
 
   _initLines() {
     const lines = this.lrc.split('\n')
-    // lines.forEach(i => {
-    //   if () {
-
-    //   }
-    // });
+    let fixLines = []
+    lines.forEach(i => {
+      let temp = i.match(/\[[\d\.:]+?\]/g)
+      let lyc = i.replace(/\[[\[\]\d\.:\]]+/g, '')
+      if (temp) {
+        temp.forEach(j => {
+          fixLines.push(`${j}${lyc}`)
+        })
+      }
+    })
     const offset = parseInt(this.tags['offset']) || 0
-    for (let i = 0; i < lines.length; i++) {
-      const line = lines[i]
+    for (let i = 0; i < fixLines.length; i++) {
+      const line = fixLines[i]
       let result = timeExp.exec(line)
       if (result) {
         const txt = line.replace(timeExp, '').trim()

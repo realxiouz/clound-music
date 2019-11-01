@@ -1,9 +1,9 @@
 <template>
   <div>
-    <div class="flex wrap">
-      <div v-for="(i, inx) in artists" :key="inx"  @click="handleArtist(i)">
+    <div class="flex wrap" style="margin-left:-41px">
+      <div v-for="(i, inx) in artists" :key="inx"  @click="handleArtist(i)" style="width:120px;padding:0 0 41px 41px">
         <el-image :src="i.picUrl" style="width:120px;height:120px"></el-image>
-        <div class="text-center">
+        <div class="text-center" style='margin-top:8px'>
           {{i.name}}
         </div>
       </div>
