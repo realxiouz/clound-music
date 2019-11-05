@@ -2,11 +2,11 @@
   <div class="main-layout">
     <div class="main">
       <left-side />
-      <div style="flex:1;overflow-y:auto">
+      <el-scrollbar style="flex:1;">
         <keep-alive>
           <router-view style="width:765px;margin:0 auto;" />
         </keep-alive>
-      </div>
+      </el-scrollbar>
     </div>
     <footer-bar />
   </div>

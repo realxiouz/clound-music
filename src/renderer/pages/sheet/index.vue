@@ -49,8 +49,11 @@
         label="歌手"
         width="180"
       >
-        <template slot-scope="scope">
+        <!-- <template slot-scope="scope">
           <div class="text-dot">{{ scope.row.ar.map(i => i.name).join('/') }}</div>
+        </template> -->
+        <template v-slot:default="{row}">
+          <div class="text-dot">{{ row.ar.map(i => i.name).join('/') }}</div>
         </template>
       </el-table-column>
       <el-table-column
