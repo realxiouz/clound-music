@@ -27,9 +27,14 @@
       </div>
     </div>
     <div class="mini-player flex align-center" v-if="listAudio.length" >
-      <el-image :src="currentAudio.al.picUrl" style="width:45px;height:45px;margin-right:4px"></el-image>
+      <div class="img-wrap pointer" @click="showSongDetail">
+        <img :src="currentAudio.al.picUrl" style="width:100%;height:100%;" v-show="currentAudio.al.picUrl"/>
+        <div class="icon-wrap">
+          <icon-svg name="big"/>
+        </div>
+      </div>
       <div class="flex-left flex direction between" style="height:36px">
-          <span class="song text-dot" @click="handleDetail">{{currentAudio.name}}</span>
+          <span class="song text-dot pointer" @click="showSongDetail">{{currentAudio.name}}</span>
           <span class="artist text-dot" @click="handleArtist">{{currentAudio.ar[0].name}}</span>
       </div>
       <span style="font-size:20px" :class="{'color-p': currentAudio.like}" class="pointer" @click="handleLike">
@@ -58,12 +63,8 @@ export default {
   },
   methods: {
     ...mapMutations('artist', ['setCurrent']),
+    ...mapMutations('play', ['setShowSongDetail']),
     ...mapActions('play', ['toggleLike']),
-    handleDetail() {
-      this.$router.push({
-        path: `/song-detail`
-      })
-    },
     handleArtist() {
       this.setCurrent(this.currentAudio.ar[0])
       this.$router.push({
@@ -72,6 +73,9 @@ export default {
     },
     handleLike() {
       this.toggleLike()
+    },
+    showSongDetail() {
+      this.setShowSongDetail(true)
     }
   },
 }
@@ -79,6 +83,29 @@ export default {
 
 <style lang="scss" scoped>
  @import '../common/css/var.scss';
+ .img-wrap{
+   width:45px;
+   height:45px;
+   margin-right:4px;
+   position: relative;
+   &:hover{
+     .icon-wrap{
+       display: flex;
+     }
+   }
+   .icon-wrap{
+     display: none;
+     position: absolute;
+     top: 0;
+     bottom: 0;
+     left: 0;
+     right: 0px;
+     background: rgba(0,0,0,.6);
+     align-items: center;
+     justify-content: space-around;
+     font-size: 32px;
+   }
+ }
  .main-wrap{
    background: $dark2;
    width:200px;

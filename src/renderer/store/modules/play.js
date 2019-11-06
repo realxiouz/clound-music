@@ -3,6 +3,7 @@ import { getSongUrl, likeSong } from '@/common/api'
 import { Message } from 'element-ui'
 
 const state = {
+  showSongDetail: '',
   likeList: [],
   playMode: 1, //1->顺序 2->列表循环 3->单曲循环 4->随机
   lyricLines: [],
@@ -24,6 +25,9 @@ const state = {
 }
 
 const mutations = {
+  setShowSongDetail(s, b) {
+    s.showSongDetail = b
+  },
   setMySheets(s, a) {
     s.mySheets = a
   },

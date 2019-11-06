@@ -1,11 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import store from '../store'
 
 import MainLayout from "@/pages/layout/main"
 import Find from '@/pages/find'
 import FM from '@/pages/FM'
 import Sheet from '@/pages/sheet'
-import SongDetail from '@/pages/song-detail'
 import ArtistDetail from '@/pages/artist-detail'
 import AlbumDetail from '@/pages/album-detail'
 import Connection from '@/pages/connection'
@@ -17,7 +17,7 @@ import Mini from '@/components/mini-play'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   routes: [
     {
       path: '/',
@@ -59,10 +59,6 @@ export default new Router({
       ]
     },
     {
-      path: '/song-detail',
-      component: SongDetail
-    },
-    {
       path: '/mv-detail/:id?',
       component: MvDetail
     },
@@ -72,3 +68,13 @@ export default new Router({
     }
   ]
 })
+
+router.beforeEach((to, from , next) => {
+  if (store.state.play.showSongDetail) {
+    store.commit('play/setShowSongDetail', false)
+    return
+  }
+  next()
+})
+
+export default router

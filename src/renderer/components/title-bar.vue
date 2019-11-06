@@ -1,6 +1,6 @@
 <template>
   <div class="title-bar drag flex align-center">
-    <div class="no-drag" @click="$router.push('/main/find')">某云音乐</div>
+    <div class="no-drag" @click="$router.push('/')">某云音乐</div>
     <el-button-group>
       <el-button class="no-drag" type="primary" icon="el-icon-edit" @click="handleBack"></el-button>
       <el-button class="no-drag" type="primary" icon="el-icon-share"></el-button>

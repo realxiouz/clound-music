@@ -4,6 +4,7 @@
       <title-bar />
       <mini-ipc />
       <audio-lyric />
+      <song-detail />
     </template>
     <div style="flex:1;height:0">
       <router-view></router-view>
@@ -29,6 +30,7 @@
   import TitleBar from '@/components/title-bar'
   import MiniIpc from '@/components/mini-ipc'
   import AudioLyric from '@/components/audio-lyric'
+  import SongDetail from '@/components/song-detail'
 
   import { mapMutations, mapState, mapActions } from 'vuex'
   import { loginByPhone, getMySheet, likeSongList } from '@/common/api'
@@ -47,7 +49,7 @@
       }
     },
     components: {
-      TitleBar, MiniIpc, AudioLyric
+      TitleBar, MiniIpc, AudioLyric, SongDetail
     },
     computed: {
       ...mapState('play', ['currentAudio']),
