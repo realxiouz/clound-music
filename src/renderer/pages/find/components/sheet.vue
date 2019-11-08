@@ -1,22 +1,27 @@
 <template>
   <div>
-    <el-tooltip placement="bottom-start" manual>
+    <el-tooltip placement="bottom-start">
       <template v-slot:content>
-        <div style="width:540px;height:410px">
-          <div>添加标签</div>
-          <div v-for="(i, inx) in cats" :key="inx" class="flex">
-            {{i.name}}
-            <div class="flex wrap">
-              <div v-for="(item, index) in i.sub" :key="index">{{item.name}}</div>
+        <div class="tips" style="width:540px;height:410px;padding:0">
+          <div class="add">添加标签</div>
+          <div class="all" @click="catChange('全部')">全部歌单</div>
+          <el-scrollbar>
+            <div v-for="(i, inx) in cats" :key="inx" class="flex cat-wrap">
+              <div style="width:83px">{{i.name}}</div>
+              <div class="flex wrap">
+                <div class="cat" v-for="(item, index) in i.sub" :key="index" @click="catChange(item.name)">{{item.name}}</div>
+              </div>
             </div>
-          </div>
+          </el-scrollbar>
         </div>
       </template>
-      <span>{{cat}} <i class="el-icon-arrow-down" /> </span>
+      <div style="display:inline-block;padding:4px 6px;background-color:#25272B;border-radius:3px">
+        {{cat}}&nbsp;&nbsp;<i class="el-icon-arrow-down" />
+      </div>
     </el-tooltip>
-    <div>
+    <div style="margin-top:12px">
       热门标签:
-      <el-tag v-for="(i, inx) in hotTags" :key="inx">
+      <el-tag v-for="(i, inx) in hotTags" :key="inx" @click="catChange(i.name)">
         {{i.name}}
       </el-tag>
     </div>
@@ -79,10 +84,7 @@ export default {
     handlePageChange(page) {
       this.page = page
       let data = {cat: '华语', offset: this.offset, limit: this.limit}
-      getSheetByCat(data).then(r => {
-        this.sheets = r.playlists
-        this.total = r.total
-      })
+      this.getSheetData()
     },
     formatCats({sub, categories}) {
       for (const key in categories) {
@@ -93,6 +95,18 @@ export default {
         })
       }
       console.log(this.cats)
+    },
+    getSheetData() {
+      let data = {cat: this.cat, offset: this.offset, limit: this.limit}
+      getSheetByCat(data).then(r => {
+        this.sheets = r.playlists
+        this.total = r.total
+      })
+    },
+    catChange(cat) {
+      this.page = 1
+      this.cat = cat
+      this.getSheetData()
     }
   },
   computed: {
@@ -102,3 +116,33 @@ export default {
   },
 }
 </script>
+
+<style lang="scss" scoped>
+.tips{
+  .add{
+    padding: 15px 20px;
+    border-bottom: 1px solid #3A393D;
+  }
+  .all{
+    margin: 10px 20px;
+    text-align: center;
+    border: 1px solid #3A393D;
+    line-height: 36px;
+  }
+  .cat-wrap{
+    margin: 0px 20px;
+    .cat{
+      width: 85px;
+      height: 32px;
+      box-sizing: border-box;
+      text-align: center;
+    }
+  }
+}
+</style>
+
+<style>
+.el-tooltip__popper{
+  padding: 0 !important;
+}
+</style>
