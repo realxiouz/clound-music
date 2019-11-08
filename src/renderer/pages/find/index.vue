@@ -4,8 +4,8 @@
       <el-tab-pane label="个性推荐">
         <recommend />
       </el-tab-pane>
-      <el-tab-pane label="歌单">
-        songs
+      <el-tab-pane label="歌单" lazy>
+        <sheet />
       </el-tab-pane>
       <el-tab-pane label="歌手" lazy>
         <artist />
@@ -17,11 +17,13 @@
 <script>
 import Recommend from './components/recommend'
 import Artist from './components/artist'
+import Sheet from './components/sheet'
 
 export default {
   components: {
     Recommend,
     Artist,
+    Sheet,
   }
 }
 </script>

@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, Menu, Tray } from 'electron'
+import { app, BrowserWindow, ipcMain, Menu, Tray, globalShortcut } from 'electron'
 
 /**
  * Set `__static` path to static files in production
@@ -11,8 +11,8 @@ if (process.env.NODE_ENV !== 'development') {
 let mainWindow
 let appTray = null
 const winURL = process.env.NODE_ENV === 'development'
-  ? `http://localhost:9080/#/main/find`
-  : `file://${__dirname}/index.html/#/main/find`
+  ? `http://localhost:9080/#main/find`
+  : `file://${__dirname}/index.html/#main/find`
 
 function createWindow () {
   /**
@@ -42,10 +42,16 @@ function createWindow () {
 
   let trayMenuTemplate = [
     {
-        label: '完整模式',
-        click: function () {
-          mainWindow.show()
-        }
+      label: 'dev',
+      click: function () {
+        mainWindow.toggleDevTools()
+      }
+    },
+    {
+      label: '完整模式',
+      click: function () {
+        mainWindow.show()
+      }
     },
     {
       label: '关闭',
@@ -53,6 +59,7 @@ function createWindow () {
         app.quit()
       }
     },
+    
   ]
 
   let iconPath = `${__static}/ico.ico`
@@ -73,6 +80,7 @@ function createMini () {
     alwaysOnTop: true,
     resizable: false,
     show: false,
+    skipTaskbar: true,
   })
   // process.mini = true
   const winURL1 = process.env.NODE_ENV === 'development'
@@ -88,6 +96,10 @@ function createMini () {
 app.on('ready', _ => {
   createWindow()
   // createMini()
+  globalShortcut.register('CommandOrControl+Shift+L', () => {
+    let focusWin = BrowserWindow.getFocusedWindow()
+    focusWin && focusWin.toggleDevTools()
+  })
 })
 
 

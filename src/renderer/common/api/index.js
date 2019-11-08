@@ -79,3 +79,8 @@ export const newMusic = _ => http.get('/personalized/newsong')
 export const privateContent = _ => http.get('/personalized/privatecontent')
 export const privateDj = _ => http.get('/personalized/djprogram')
 export const privateMv = _ => http.get('/personalized/mv')
+
+// 歌单
+export const getSheetCat = _ => http.get('/playlist/catlist')
+export const getSheetHotCat = _ => http.get('/playlist/hot')
+export const getSheetByCat = params => http.get('/top/playlist', {params}) // {cat, limit, }
