@@ -9,3 +9,11 @@ Vue.filter('songLength', time => {
   let s = t%60
   return `${m<10?'0'+m:m}:${s<10?'0'+s:s}`
 })
+
+Vue.filter('playCount', count => {
+  if (count <= 100000) {
+      return count
+  } else {
+    return Math.floor(count / 10000) + '万'
+  }
+})

@@ -1,13 +1,13 @@
 <template>
   <div>
-    <el-tooltip placement="bottom-start">
+    <el-tooltip placement="bottom-start" :disabled="!showTip">
       <template v-slot:content>
-        <div class="tips" style="width:540px;height:410px;padding:0">
+        <div class="tips flex direction">
           <div class="add">添加标签</div>
           <div class="all" @click="catChange('全部')">全部歌单</div>
-          <el-scrollbar>
+          <el-scrollbar style="height:0;flex:1">
             <div v-for="(i, inx) in cats" :key="inx" class="flex cat-wrap">
-              <div style="width:83px">{{i.name}}</div>
+              <div class="flex-left">{{i.name}}</div>
               <div class="flex wrap">
                 <div class="cat" v-for="(item, index) in i.sub" :key="index" @click="catChange(item.name)">{{item.name}}</div>
               </div>
@@ -15,7 +15,9 @@
           </el-scrollbar>
         </div>
       </template>
-      <div style="display:inline-block;padding:4px 6px;background-color:#25272B;border-radius:3px">
+      <div
+        @click="showTip=true"
+        style="display:inline-block;padding:4px 6px;background-color:#25272B;border-radius:3px">
         {{cat}}&nbsp;&nbsp;<i class="el-icon-arrow-down" />
       </div>
     </el-tooltip>
@@ -59,6 +61,7 @@ export default {
       cats: [],
       hotTags: [],
       sheets: [],
+      showTip: false,
 
       page: 1,
       limit: 40,
@@ -94,7 +97,6 @@ export default {
           sub: sub.filter(i => i.category == key)
         })
       }
-      console.log(this.cats)
     },
     getSheetData() {
       let data = {cat: this.cat, offset: this.offset, limit: this.limit}
@@ -107,6 +109,9 @@ export default {
       this.page = 1
       this.cat = cat
       this.getSheetData()
+    },
+    close() {
+      this.showTip = false
     }
   },
   computed: {
@@ -119,6 +124,8 @@ export default {
 
 <style lang="scss" scoped>
 .tips{
+  width:540px;
+  height:410px;
   .add{
     padding: 15px 20px;
     border-bottom: 1px solid #3A393D;

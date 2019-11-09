@@ -10,6 +10,7 @@ import router from './router'
 import store from './store'
 
 import './fliter'
+import './directive'
 import './icons'
 
 import Local from '@/common/local'

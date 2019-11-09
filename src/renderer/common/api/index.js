@@ -84,3 +84,11 @@ export const privateMv = _ => http.get('/personalized/mv')
 export const getSheetCat = _ => http.get('/playlist/catlist')
 export const getSheetHotCat = _ => http.get('/playlist/hot')
 export const getSheetByCat = params => http.get('/top/playlist', {params}) // {cat, limit, }
+
+// 榜单
+export const getTopList = _ => http.get('/toplist')
+export const getTop = params => http.get('/top/list', {params}) // {inx}
+export const getTopListDetail = _ => http.get('/toplist/detail')
+
+// 私人FM
+export const personalFm = params => http.get('/personal_fm', {params})

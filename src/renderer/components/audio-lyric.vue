@@ -26,6 +26,11 @@ export default {
       this.miniId && this.$electron.remote.BrowserWindow.fromId(this.miniId).webContents.send('audioPlaying', false)
     })
 
+    this.$refs.audio.addEventListener('error', _ => {
+      console.log('play err')
+      
+    })
+
     this.$refs.audio.volume = (this.$local.get('volume')||50)/100
     this.$root.$audio = this.$refs.audio
   },

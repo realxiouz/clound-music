@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div class="d-mask" :class="{show: value}" @click="$emit('input', false)"></div>
-    <div class="d-wrap" :class="{show: value}" >
+    <!-- <div class="d-mask" :class="{show: value}" @click="$emit('input', false)"></div> -->
+    <div class="d-wrap" :class="{show: value}">
       <div ref="songs" style="height:100%;over-flow:hidden">
         <div>
           <div
@@ -44,6 +44,9 @@ export default {
     ...mapActions('play', ['playFromIndex']),
     playSel(inx) {
       this.playFromIndex(inx)
+    },
+    close() {
+      this.$emit('input', false)
     }
   },
   computed: {

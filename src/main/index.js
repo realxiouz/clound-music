@@ -24,7 +24,8 @@ function createWindow () {
     width: 1000,
     frame: false,
     backgroundColor: '#16181C',
-    show: false
+    show: false,
+    resizable: false,
   })
 
   // process.mini = false
